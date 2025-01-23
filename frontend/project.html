@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management</title>
+    <link rel="shortcut icon" href="./images/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="navbar">
+        <nav class="company-navbar">
+          <div class="company-navbar-left">
+            <img
+              src="./images/logo.png"
+              alt="Company Logo"
+              class="company-logo"
+            />
+            <span class="company-name">CoordiNation</span>
+          </div>
+          <div class="company-navbar-right">
+            <button class="company-contact-us">
+              <a href="#contact">Contact Us</a>
+            </button>
+          </div>
+        </nav>
+        <div class="burger" onclick="toggleMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-list">
+          <li><a href="index.html#dashboard" class="nav-link">Dashboard</a></li>
+          <li><a href="task.html" class="nav-link">Tasks</a></li>
+          <li><a href="project.html" class="nav-link">Projects</a></li>
+          <li><a href="resource.html" class="nav-link">Resources</a></li>
+          <li><a href="index.html#calendar" class="nav-link">Calendar</a></li>
+          <li><a href="userdetail.html" class="nav-link">Profiles</a></li>
+          <li><a href="index.html#map-section" class="nav-link">Location</a></li>
+          <li><a href="index.html#documents" class="nav-link">Documents</a></li>
+          <li><a href="index.html#forum" class="nav-link">Forum</a></li>
+          <li>
+            <a href="/login.html" id="logout-link" class="nav-link">LogOut</a>
+          </li>
+        </ul>
+      </header>
+    <div class="project-container" id="projects">
+        <h1>Project Management</h1>
+        <div id="create-project-section" class="hidden">
+          <h2>Create Project</h2>
+          <div class="form-group">
+            <label for="projectName">Project Name</label>
+            <input
+              type="text"
+              id="projectName"
+              placeholder="Enter project name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="projectDescription">Project Description</label>
+            <textarea
+              id="projectDescription"
+              rows="3"
+              placeholder="Enter project description"
+            ></textarea>
+          </div>
+          <p><strong>Admin Name:</strong> <span id="username"></span></p>
+          <p><strong>Department:</strong> <span id="department"></span></p>
+          <div class="form-group">
+            <label for="duration">Duration</label>
+            <input
+              type="text"
+              id="duration"
+              placeholder="Enter project duration"
+            />
+          </div>
+          <button class="project-button" onclick="createProject()">
+            Create Project
+          </button>
+        </div>
+
+        <div class="projects" id="projects-section">
+          <h2>All Projects</h2>
+          <!-- Projects will be dynamically rendered here -->
+        </div>
+      </div>
+      <script>
+        const userData = JSON.parse(localStorage.getItem("user"));
+        const projectsSection = document.getElementById("projects-section");
+        const createProjectSection = document.getElementById(
+          "create-project-section"
+        );
+        let projects = JSON.parse(localStorage.getItem("projects")) || [];
+  
+        // Check if the user is an admin
+        if (userData?.role === "admin") {
+          createProjectSection.classList.remove("hidden");
+        }
+  
+        if (userData) {
+          document.getElementById("username").innerText = userData.name;
+          document.getElementById("department").innerText = userData.department;
+        }
+  
+        let editIndex = null; // To track the index of the project being edited
+  
+        function renderProjects() {
+          projectsSection.innerHTML = "<h2>All Projects</h2>";
+          projects.forEach((project, index) => {
+            const projectCard = document.createElement("div");
+            projectCard.className = "project-card";
+            projectCard.innerHTML = `
+        <h3>${project.name}</h3>
+        <p><strong>Description:</strong> ${project.description}</p>
+        <p><strong>Admin:</strong> ${project.admin}</p>
+        <p><strong>Duration:</strong> ${project.duration}</p>
+      `;
+  
+            if (userData?.role === "admin") {
+              projectCard.innerHTML += `
+          <div class="buttons">
+            <button class="edit" onclick="editProject(${index})">Edit</button>
+            <button onclick="deleteProject(${index})">Delete</button>
+          </div>
+        `;
+            }
+  
+            projectsSection.appendChild(projectCard);
+          });
+        }
+  
+        function createProject() {
+          const name = document.getElementById("projectName").value;
+          const description = document.getElementById("projectDescription").value;
+          const admin = document.getElementById("username").innerText;
+          const duration = document.getElementById("duration").value;
+  
+          if (!name || !description || !admin || !duration) {
+            alert("Please fill out all fields.");
+            return;
+          }
+  
+          if (editIndex !== null) {
+            // Update the existing project
+            projects[editIndex] = { name, description, admin, duration };
+            editIndex = null; // Reset editIndex
+          } else {
+            // Add a new project
+            projects.push({ name, description, admin, duration });
+          }
+  
+          localStorage.setItem("projects", JSON.stringify(projects));
+          renderProjects();
+  
+          // Clear the form
+          document.getElementById("projectName").value = "";
+          document.getElementById("projectDescription").value = "";
+          document.getElementById("duration").value = "";
+        }
+  
+        function editProject(index) {
+          const project = projects[index];
+          document.getElementById("projectName").value = project.name;
+          document.getElementById("projectDescription").value =
+            project.description;
+          document.getElementById("duration").value = project.duration;
+  
+          editIndex = index; // Set the index of the project being edited
+        }
+  
+        function deleteProject(index) {
+          projects.splice(index, 1);
+          localStorage.setItem("projects", JSON.stringify(projects));
+          renderProjects();
+        }
+  
+        // Render projects on page load
+        renderProjects();
+      </script>
+</body>
+</html>

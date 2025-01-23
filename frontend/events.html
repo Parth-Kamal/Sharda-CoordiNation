@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="./images/logo.png" type="image/x-icon">
+    <style>
+      body {
+        font-family: "Outfit", serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f8ff;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      h1 {
+        color: #0066cc;
+        text-align: center;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 20px;
+        max-width: 1200px;
+        width: 100%;
+      }
+
+      .form-container,
+      .event-list-container {
+        flex: 1;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-container {
+        max-width: 450px;
+        max-height: 600px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #000;
+      }
+
+      input,
+      textarea {
+        width: 90%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        color: #ffffff;
+        background-color: #004080;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #0066cc;
+      }
+
+      button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+
+      #saveEvent,
+      #cancelEdit {
+        width: auto;
+        display: inline-block;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      li {
+        background-color: #e6f2ff;
+        margin-bottom: 10px;
+        padding: 12px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      li button {
+        margin: 0;
+        padding: 5px 10px;
+        font-size: 0.9rem;
+      }
+      .descrp {
+        max-width: 500px;
+      }
+      .event-buttons {
+        display: flex;
+        gap: 8px;
+      }
+      .edit-button {
+        background-color: #28a745;
+      }
+      .delete-button {
+        background-color: #dc3545;
+      }
+      .back-arrow {
+        text-decoration: none;
+        color: #0066cc;
+        margin-right: 10px;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        li {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        li button {
+          margin-top: 5px;
+        }
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        width: 100%;
+        padding: 10px 0;
+      }
+
+      .back-arrow {
+        position: absolute;
+        left: 60px;
+        text-decoration: none;
+        font-size: 38px;
+        color: #000;
+        
+      }
+
+      h1 {
+        margin: 0;
+        color: #0066cc;
+        font-size: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <a href="./index.html#calendar" class="back-arrow">&#8592;</a>
+      <h1>Event Management</h1>
+    </div>
+    <div class="container">
+      <div class="form-container">
+        <form id="eventForm">
+          <label for="name">Event Name:</label>
+          <input type="text" id="name" name="name" required /><br />
+
+          <label for="startDate">Start Date:</label>
+          <input type="date" id="startDate" name="startDate" required /><br />
+
+          <label for="endDate">End Date:</label>
+          <input type="date" id="endDate" name="endDate" required /><br />
+
+          <label for="startTime">Start Time:</label>
+          <input type="time" id="startTime" name="startTime" required /><br />
+
+          <label for="endTime">End Time:</label>
+          <input type="time" id="endTime" name="endTime" required /><br />
+
+          <label for="description">Description:</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="4"
+            required
+          ></textarea
+          ><br />
+
+          <button type="button" id="saveEvent">Save Event</button>
+          <button type="button" id="cancelEdit" style="display: none">
+            Cancel Edit
+          </button>
+        </form>
+      </div>
+
+      <div class="event-list-container">
+        <h2>Existing Events</h2>
+        <ul id="eventList"></ul>
+      </div>
+    </div>
+
+    <script>
+      const eventForm = document.getElementById("eventForm");
+      const eventList = document.getElementById("eventList");
+      const saveButton = document.getElementById("saveEvent");
+      const cancelEditButton = document.getElementById("cancelEdit");
+      let editIndex = null;
+
+      function loadEvents() {
+        const events = JSON.parse(localStorage.getItem("events")) || [];
+        eventList.innerHTML = "";
+        events.forEach((event, index) => {
+          const li = document.createElement("li");
+          li.className = "event-item";
+
+          // Event details
+          const detailsDiv = document.createElement("div");
+          detailsDiv.className = "event-details";
+          detailsDiv.innerHTML = `
+          <p><strong>${event.name}</strong></p>
+          <p>${event.startDate} - ${event.endDate}</p>
+          <p class="descrp">${event.description}</p>
+        `;
+
+          // Buttons
+          const buttonsDiv = document.createElement("div");
+          buttonsDiv.className = "event-buttons";
+
+          const editButton = document.createElement("button");
+          editButton.className = "edit-button";
+          editButton.textContent = "Edit";
+          editButton.addEventListener("click", () => editEvent(index));
+
+          const deleteButton = document.createElement("button");
+          deleteButton.className = "delete-button";
+          deleteButton.textContent = "Delete";
+          deleteButton.addEventListener("click", () => deleteEvent(index));
+
+          buttonsDiv.appendChild(editButton);
+          buttonsDiv.appendChild(deleteButton);
+
+          li.appendChild(detailsDiv);
+          li.appendChild(buttonsDiv);
+          eventList.appendChild(li);
+        });
+      }
+
+      function saveEvent() {
+        const events = JSON.parse(localStorage.getItem("events")) || [];
+        const newEvent = {
+          name: eventForm.name.value,
+          startDate: eventForm.startDate.value,
+          endDate: eventForm.endDate.value,
+          start: `T${eventForm.startTime.value}:00`,
+          end: `T${eventForm.endTime.value}:00`,
+          description: eventForm.description.value,
+        };
+
+        if (editIndex !== null) {
+          events[editIndex] = newEvent;
+          editIndex = null;
+          saveButton.textContent = "Save Event";
+          cancelEditButton.style.display = "none";
+        } else {
+          events.push(newEvent);
+        }
+
+        localStorage.setItem("events", JSON.stringify(events));
+        eventForm.reset();
+        loadEvents();
+      }
+
+      function editEvent(index) {
+        const events = JSON.parse(localStorage.getItem("events")) || [];
+        const event = events[index];
+
+        eventForm.name.value = event.name;
+        eventForm.startDate.value = event.startDate;
+        eventForm.endDate.value = event.endDate;
+        eventForm.startTime.value = event.start.slice(1, 6);
+        eventForm.endTime.value = event.end.slice(1, 6);
+        eventForm.description.value = event.description;
+
+        editIndex = index;
+        saveButton.textContent = "Update Event";
+        cancelEditButton.style.display = "inline";
+      }
+
+      function cancelEdit() {
+        editIndex = null;
+        eventForm.reset();
+        saveButton.textContent = "Save Event";
+        cancelEditButton.style.display = "none";
+      }
+
+      function deleteEvent(index) {
+        const events = JSON.parse(localStorage.getItem("events")) || [];
+        events.splice(index, 1);
+        localStorage.setItem("events", JSON.stringify(events));
+        loadEvents();
+      }
+
+      saveButton.addEventListener("click", saveEvent);
+      cancelEditButton.addEventListener("click", cancelEdit);
+
+      loadEvents();
+    </script>
+  </body>
+</html>

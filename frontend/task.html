@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Management</title>
+    <link rel="stylesheet" href="styles.css" />
+
+    <style>
+      .body-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        height: 100vh;
+        padding: 20px;
+      }
+
+      .task-container {
+        display: flex;
+        gap: 20px;
+        flex-direction: row;
+        width: 80%;
+        max-width: 1200px;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .form-container {
+        flex: 2; /* Larger width for the form section */
+        height: 350px;
+        padding: 30px;
+        background-color: #fafbfc;
+        border-right: 1px solid #e0e0e0;
+      }
+
+      h1 {
+        font-size: 24px;
+        color: #333333;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #007bff;
+        display: inline-block;
+        padding-bottom: 5px;
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      .input-group label {
+        display: block;
+        font-size: 16px;
+        color: #555555;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .input-group input,
+      .input-group select {
+        width: 90%;
+        padding: 12px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: border-color 0.3s ease;
+      }
+      .input-group input {
+        width: 87%;
+      }
+      .input-group input:focus,
+      .input-group select:focus {
+        border-color: #007bff;
+        outline: none;
+      }
+
+      .task-button {
+        display: inline-block;
+        padding: 12px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 40%;
+      }
+
+      .task-button:hover {
+        background-color: #0056b3;
+      }
+
+      .message {
+        margin-top: 15px;
+        font-size: 14px;
+      }
+
+      .task-list-container {
+        flex: 2;
+        width: 35%;
+        padding: 20px;
+        background-color: #ffffff;
+        overflow-y: auto;
+        max-height: calc(100vh - 40px);
+      }
+
+      .task-list-container h2 {
+        font-size: 20px;
+        color: #333333;
+        margin-bottom: 15px;
+      }
+
+      .task-item {
+        background: #f9f9f9;
+        margin-bottom: 15px;
+        padding: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+      }
+
+      .task-item:hover {
+        transform: translateY(-5px);
+      }
+
+      .task-item h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        color: #007bff;
+      }
+
+      .task-item p {
+        margin: 0;
+        font-size: 14px;
+        color: #555555;
+      }
+
+      @media (max-width: 768px) {
+        .task-container {
+          flex-direction: column;
+          width: 95%;
+        }
+
+        .form-container {
+          height: auto;
+          border-right: none;
+          border-bottom: 1px solid #e0e0e0;
+        }
+
+        .task-list-container {
+          width: 92%;
+          padding-top: 10px;
+          max-height: 50vh;
+        }
+        .task-button {
+          width: 40%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="navbar">
+      <nav class="company-navbar">
+        <div class="company-navbar-left">
+          <img
+            src="./images/logo.png"
+            alt="Company Logo"
+            class="company-logo"
+          />
+          <span class="company-name">CoordiNation</span>
+        </div>
+        <div class="company-navbar-right">
+          <button class="company-contact-us">
+            <a href="#contact">Contact Us</a>
+          </button>
+        </div>
+      </nav>
+      <div class="burger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="nav-list">
+        <li><a href="index.html#dashboard" class="nav-link">Dashboard</a></li>
+        <li><a href="task.html" class="nav-link">Tasks</a></li>
+        <li><a href="project.html" class="nav-link">Projects</a></li>
+        <li><a href="resource.html" class="nav-link">Resources</a></li>
+        <li><a href="index.html#calendar" class="nav-link">Calendar</a></li>
+        <li><a href="userdetail.html" class="nav-link">Profiles</a></li>
+        <li><a href="index.html#map-section" class="nav-link">Location</a></li>
+        <li><a href="index.html#documents" class="nav-link">Documents</a></li>
+        <li><a href="index.html#forum" class="nav-link">Forum</a></li>
+        <li>
+          <a href="/login.html" id="logout-link" class="nav-link">LogOut</a>
+        </li>
+      </ul>
+    </header>
+    <div class="body-container">
+      <div class="task-container">
+        <div class="form-container hidden">
+          <h1>Create New Task</h1>
+          <div class="input-group">
+            <label for="task-title">Task Title</label>
+            <input
+              type="text"
+              id="task-title"
+              placeholder="Enter task title"
+              required
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="task-status">Task Status</label>
+            <select id="task-status" required>
+              <option value="pending">Pending</option>
+              <option value="ongoing">Ongoing</option>
+            </select>
+          </div>
+
+          <button class="task-button" id="create-task-button">
+            Create Task
+          </button>
+
+          <div class="message" id="message"></div>
+        </div>
+
+        <div class="task-list-container" id="task-list-container">
+          <h2>All Tasks</h2>
+          <div id="task-list">
+            <!-- Task list will be populated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("create-task-button")
+        .addEventListener("click", createTask);
+
+      window.onload = async () => {
+        await fetchTasks();
+        const formContainer = document.getElementsByClassName("form-container")[0];
+        (JSON.parse(localStorage.getItem("user")).role === "admin") && formContainer.classList.remove("hidden")
+      };
+
+      async function createTask() {
+        const title = document.getElementById("task-title").value;
+        const status = document.getElementById("task-status").value;
+        const messageElement = document.getElementById("message");
+
+        if (!title) {
+          messageElement.innerHTML = "Please provide a task title!";
+          messageElement.style.color = "red";
+          return;
+        }
+
+        const data = { title, status };
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("token");
+
+        if (!user || !token) {
+          messageElement.innerHTML =
+            "No user found or no token found. Please log in again.";
+          messageElement.style.color = "red";
+          return;
+        }
+
+        data.department = user.department;
+
+        try {
+          const response = await fetch(
+            `http://localhost:8000/api/tasks`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(data),
+            }
+          );
+
+          const result = await response.json();
+
+          if (response.ok) {
+            messageElement.innerHTML = "Task created successfully!";
+            messageElement.style.color = "green";
+            await fetchTasks();
+          } else {
+            messageElement.innerHTML =
+              result.message || "Failed to create task";
+            messageElement.style.color = "red";
+          }
+        } catch (error) {
+          messageElement.innerHTML = "Error creating task: " + error;
+          messageElement.style.color = "red";
+        }
+      }
+
+      async function fetchTasks() {
+        const taskListContainer = document.getElementById("task-list");
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("token");
+
+        if (!user || !token) {
+          taskListContainer.innerHTML = "Please log in to see tasks.";
+          return;
+        }
+
+        try {
+          const response = await fetch("http://localhost:8000/api/tasks", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            const tasks = result.tasks;
+            if (tasks && tasks.length > 0) {
+              taskListContainer.innerHTML = tasks
+                .map(
+                  (task) => `
+              <div class="task-item">
+                <h3>${task.title}</h3>
+                <p>Status: ${task.status}</p>
+                <p>Department: ${task.department}</p>
+              </div>
+            `
+                )
+                .join("");
+            } else {
+              taskListContainer.innerHTML = "No tasks available.";
+            }
+          } else {
+            taskListContainer.innerHTML = "Failed to fetch tasks.";
+          }
+        } catch (error) {
+          taskListContainer.innerHTML = "Error fetching tasks: " + error;
+        }
+      }
+    </script>
+  </body>
+</html>

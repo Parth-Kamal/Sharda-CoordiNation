@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login/SignUp</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="shortcut icon" href="./images/logo.png" type="image/x-icon" />
+    <script>
+      if (!localStorage.getItem("hasRedirected")) {
+        localStorage.setItem("hasRedirected", "true");
+        window.location.href = "landing.html";
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Custom Alert Box -->
+    <div id="customAlert" class="alert-box">
+      <div class="alert-content">
+        <span class="alert-message" id="alertMessage"
+          >This is an alert message</span
+        >
+        <button onclick="closeAlert()" class="alert-button">OK</button>
+      </div>
+    </div>
+
+    <header class="navbar">
+      <nav class="company-navbar">
+        <div class="company-navbar-left">
+          <img
+            src="./images/logo.png"
+            alt="Company Logo"
+            class="company-logo"
+          />
+          <span class="company-name">CoordiNation</span>
+        </div>
+        <div class="company-navbar-right">
+          <button class="company-contact-us">Contact Us</button>
+        </div>
+      </nav>
+    </header>
+
+    <div class="login-container">
+      <div class="login-form-container" id="login-form">
+        <h2>Login</h2>
+        <form id="loginForm">
+          <input type="email" placeholder="Email" id="loginEmail" required />
+          <input
+            type="password"
+            placeholder="Password"
+            id="loginPassword"
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+        <div class="login-toggle-form">
+          <p class="login-link">
+            Don't have an account?
+            <a href="#" onclick="showSignup()">Sign Up</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="login-form-container" id="signup-form" style="display: none">
+        <h2>Sign Up</h2>
+        <form id="registerForm">
+          <input type="text" placeholder="Username" id="name" required />
+          <input type="email" placeholder="Email" id="email" required />
+          <input
+            type="password"
+            placeholder="Password"
+            id="password"
+            required
+          />
+          <select id="department" required>
+            <option value="">Select Department</option>
+            <option value="Water Pipeline Department">
+              Water Pipeline Department
+            </option>
+            <option value="Road Department">Road Department</option>
+            <option value="Gas Pipeline Department">
+              Gas Pipeline Department
+            </option>
+          </select>
+          <select id="state" required>
+            <option value="">Select Region</option>
+            <option value="Andhra Pradesh">Andhra Pradesh</option>
+            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+            <option value="Assam">Assam</option>
+            <option value="Bihar">Bihar</option>
+            <option value="Chhattisgarh">Chhattisgarh</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Goa">Goa</option>
+            <option value="Gujarat">Gujarat</option>
+            <option value="Haryana">Haryana</option>
+            <option value="Himachal Pradesh">Himachal Pradesh</option>
+            <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+            <option value="Jharkhand">Jharkhand</option>
+            <option value="Karnataka">Karnataka</option>
+            <option value="Kerala">Kerala</option>
+            <option value="Madhya Pradesh">Madhya Pradesh</option>
+            <option value="Maharashtra">Maharashtra</option>
+            <option value="Manipur">Manipur</option>
+            <option value="Meghalaya">Meghalaya</option>
+            <option value="Mizoram">Mizoram</option>
+            <option value="Nagaland">Nagaland</option>
+            <option value="Odisha">Odisha</option>
+            <option value="Punjab">Punjab</option>
+            <option value="Rajasthan">Rajasthan</option>
+            <option value="Sikkim">Sikkim</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Tripura">Tripura</option>
+            <option value="Telangana">Telangana</option>
+            <option value="Uttar Pradesh">Uttar Pradesh</option>
+            <option value="Uttarakhand">Uttarakhand</option>
+            <option value="West Bengal">West Bengal</option>
+            <option value="Andaman & Nicobar (UT)">
+              Andaman & Nicobar (UT)
+            </option>
+            <option value="Chandigarh (UT)">Chandigarh (UT)</option>
+            <option value="Dadra & Nagar Haveli (UT)">
+              Dadra & Nagar Haveli (UT)
+            </option>
+            <option value="Daman & Diu (UT)">Daman & Diu (UT)</option>
+            <option value="Lakshadweep (UT)">Lakshadweep (UT)</option>
+            <option value="Puducherry (UT)">Puducherry (UT)</option>
+          </select>
+
+          <div class="role-select">
+            <input type="radio" id="admin" name="role" value="admin" required />
+            <label for="admin">Leader</label>
+            <input
+              type="radio"
+              id="official"
+              name="role"
+              value="official"
+              required
+            />
+            <label for="official">Member</label>
+            <input type="radio" id="user" name="role" value="user" required />
+            <label for="user">User</label>
+          </div>
+          <button type="submit">Sign Up</button>
+        </form>
+        <div class="login-toggle-form">
+          <p class="login-link">
+            Already have an account? <a href="#" onclick="showLogin()">Login</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
+    <script>
+      function showSignup() {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("signup-form").style.display = "block";
+      }
+
+      function showLogin() {
+        document.getElementById("signup-form").style.display = "none";
+        document.getElementById("login-form").style.display = "block";
+      }
+
+      const apiURL = "http://localhost:8000/auth";
+
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const department = document.getElementById("department").value;
+          const role = document.querySelector(
+            'input[name="role"]:checked'
+          ).value;
+          const state = document.getElementById("state").value;
+
+          if (!state) {
+            showAlert("Please select a state.");
+            return;
+          }
+
+          // Save to local storage
+          const userData = { name, email, password, department, role, state };
+          localStorage.setItem("signupData", JSON.stringify(userData));
+          console.log("Signup data saved locally.");
+
+          try {
+            const response = await fetch(`${apiURL}/register`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ name, email, password, department, role }),
+            });
+            const result = await response.json();
+            showAlert(result.message);
+            window.location.href="login.html";
+          } catch (error) {
+            console.error(error);
+            showAlert("Failed to register");
+          }
+        });
+
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const email = document.getElementById("loginEmail").value;
+          const password = document.getElementById("loginPassword").value;
+
+          try {
+            const response = await fetch(`${apiURL}/login`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            });
+            const result = await response.json();
+
+            if (result.success) {
+              localStorage.setItem("token", result.token);
+              localStorage.setItem("user", JSON.stringify(result.user));
+
+              showAlert("Login successful");
+
+              // Redirect based on role
+              if (result.user.role === "user") {
+                window.location.href = "profile.html";
+              } else {
+                window.location.href = "index.html";
+              }
+            } else {
+              showAlert(result.message);
+            }
+          } catch (error) {
+            console.error(error);
+            showAlert("Failed to login");
+          }
+        });
+    </script>
+  </body>
+</html>

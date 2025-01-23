@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoordiNation</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="shortcut icon" href="./images/logo.png" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* General Styling */
+      body {
+        margin: 0;
+        font-family: "Outfit", sans-serif;
+      }
+
+      .navbar {
+        background-color: #0077b6;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+      }
+
+      .company-navbar-left {
+        display: flex;
+        align-items: center;
+      }
+
+      .company-logo {
+        height: 40px;
+        margin-right: 10px;
+      }
+
+      .company-name {
+        font-size: 25px;
+        font-weight: bold;
+        margin-right: 100px;
+      }
+
+      .company-navbar-right {
+        display: flex;
+        align-items: center;
+      }
+
+      .nav-list {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav-link {
+        text-decoration: none;
+        color: #fff;
+        margin: 0 10px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      .nav-link:hover {
+        background-color: #005f8a;
+      }
+
+      .burger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        z-index: 15;
+        background-color: white;
+      }
+
+      .burger span {
+        height: 3px;
+        width: 25px;
+        background-color: black;
+        color: black;
+        margin: 4px 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      /* Active burger icon styling */
+      .burger.active span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+
+      .burger.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .burger.active span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .task-section {
+        display: flex;
+        flex-direction: column; /* Arrange cards vertically */
+        gap: 20px; /* Space between the cards */
+      }
+
+      .task-card {
+        width: 100%; /* Take up full width */
+        background-color: #0077b6;
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        text-align: center;
+      }
+
+      .task-card:hover {
+        background-color: #005f8a;
+      }
+
+      .task-card h4 {
+        margin: 10px 0;
+        font-size: 22px;
+      }
+
+      .task-card p {
+        margin: 5px 0;
+        font-size: 16px;
+      }
+
+      @media (max-width: 1024px) {
+        .container {
+          padding: 10px;
+        }
+
+        .task-card {
+          padding: 15px;
+        }
+        .company-name{
+          margin-right: 0;
+        }
+      }
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .task-card {
+          padding: 10px;
+        }
+        .company-navbar-right {
+          display: none;
+          flex-direction: column;
+          align-items: center;
+          position: absolute;
+          top: 60px;
+          right: 0;
+          background-color: #0077b6;
+          width: 100%;
+          z-index: 10;
+          border-top: 2px solid #005f8a;
+        }
+
+        .company-navbar-right.active {
+          display: flex;
+        }
+
+        .nav-list {
+          flex-direction: column;
+          width: 100%;
+          text-align: center;
+          padding: 0;
+        }
+
+        .nav-link {
+          margin: 5px 0;
+          width: 100%;
+          padding: 10px 0;
+          background-color: #005f8a;
+          border-bottom: 1px solid #0077b6;
+        }
+
+        .burger {
+          display: flex;
+        }
+        .company-name{
+          margin-right: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="navbar">
+      <nav class="company-navbar">
+        <div class="company-navbar-left">
+          <img
+            src="./images/logo.png"
+            alt="Company Logo"
+            class="company-logo"
+          />
+          <span class="company-name">CoordiNation</span>
+        </div>
+        <div class="company-navbar-right">
+          <ul class="nav-list">
+            <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+            <li><a href="#calendar" class="nav-link">Calendar</a></li>
+            <li><a href="profile.html" class="nav-link">Profiles</a></li>
+            
+            <li><a href="#contact" class="nav-link">Contact Us</a></li>
+            <li>
+              <a href="/login.html" id="logout-link" class="nav-link">LogOut</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div class="burger" onclick="toggleMenu()">
+        <img src="./images/hamburger.webp" alt="" />
+      </div>
+    </header>
+
+    <div class="container" id="dashboard">
+      <h2>Projects</h2>
+      <div class="task-section" id="taskSection">
+        <!-- Task Cards Will Be Rendered Here -->
+      </div>
+    </div>
+
+
+    <div class="calendar-container">
+      <!-- Calendar Section -->
+      <div class="calendar">
+        <div class="calendar-header">
+          <button id="prev-month">Previous</button>
+          <h2 id="calendar-title"></h2>
+          <button id="next-month">Next</button>
+        </div>
+        <div id="calendar"></div>
+      </div>
+
+      <!-- Event Details Section -->
+      <div class="calendar-sidebar">
+        <div id="event-display">
+          <h3>Event Details</h3>
+          <p>Select a date to see the events</p>
+        </div>
+        <div class="hidden" id="add-event">
+          <a class="button" id="add-event-button" href="/events.html"
+            >Add Event</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-section" id="contact">
+      <h2>Contact Us</h2>
+      <p>
+        Get in touch with your desired department or ask your questions. We'd
+        love to hear from you!
+      </p>
+
+      <div class="contact-card">
+        <form id="contactForm">
+          <label for="name">Your Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your name"
+            required
+          />
+
+          <label for="email">Your Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+          />
+
+          <label for="department">Department</label>
+          <select id="department" name="department" required>
+            <option value="" disabled selected>Select a department</option>
+            <option value="road">Road Department</option>
+            <option value="WaterPipeline">WaterPipeline Department</option>
+            <option value="GasPipeline">GasPipeline Department</option>
+          </select>
+
+          <label for="message">Your Message</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="5"
+            placeholder="Type your message"
+            required
+          ></textarea>
+
+          <button type="submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+      function toggleChat() {
+        const chatbotWindow = document.getElementById("chatbot-window");
+        chatbotWindow.style.display =
+          chatbotWindow.style.display === "none" ? "flex" : "none";
+      }
+    </script>
+    <script>
+      function toggleMenu() {
+        const navbarRight = document.querySelector(".company-navbar-right");
+        const burger = document.querySelector(".burger");
+
+        navbarRight.classList.toggle("active");
+        burger.classList.toggle("active"); // Add this line to toggle the burger's appearance
+      }
+    </script>
+
+    <script>
+      const tasks = [
+        {
+          name: "Road Widening Project",
+          department: "Road Department",
+          status: "Ongoing",
+          locality: "Ashok Vihar, Saket",
+        },
+        {
+          name: "Public Park Development ",
+          department: "Road Department",
+          status: "Pending",
+          locality: "Ashok Vihar , Saket",
+        },
+        {
+          name: "Community Hall Construction",
+          department: "Road Department",
+          status: "Ongoing",
+          locality: "Ashok Vihar, Saket",
+        },
+      ];
+
+      // Render Task Cards
+      const taskSection = document.getElementById("taskSection");
+
+      tasks.forEach((task, index) => {
+        const card = document.createElement("div");
+        card.classList.add("task-card");
+        card.innerHTML = `
+        <h4>${task.name}</h4>
+        <p><strong>Department:</strong> ${task.department}</p>
+        <p><strong>Status:</strong> ${task.status}</p>
+        <p><strong>Locality:</strong> ${task.locality}</p>
+      `;
+        card.onclick = () => openProjectPage(index);
+        taskSection.appendChild(card);
+      });
+
+      // Save Task Data and Redirect to user-project.html
+      function openProjectPage(index) {
+        localStorage.setItem("selectedTask", JSON.stringify(tasks[index]));
+        window.location.href = "user-project.html";
+      }
+    </script>
+
+    <script>
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        window.location.href = "login.html";
+      }
+
+      document
+        .getElementById("logout-link")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          localStorage.removeItem("profile")
+          window.location.href = "login.html";
+        });
+
+      const contactForm = document.getElementById("contactForm");
+
+      contactForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const department = document.getElementById("department").value;
+        const message = document.getElementById("message").value;
+
+        try {
+          const response = await fetch("http://localhost:8000/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, department, message }),
+          });
+          const result = await response.json();
+          alert(result.message);
+          if (result.success) {
+            contactForm.reset();
+          }
+        } catch (error) {
+          console.error("Error submitting contact form:", error);
+          alert("Failed to send the message. Please try again.");
+        }
+      });
+    </script>
+
+    <script>
+      if (!localStorage.getItem("events")) {
+        localStorage.setItem(
+          "events",
+          JSON.stringify([
+            {
+              startDate: "2025-01-10",
+              endDate: "2025-01-10",
+              name: "Meeting with Dept. A",
+              start: "T09:00:00",
+              end: "T10:00:00",
+              description:
+                "Discuss upcoming projects and collaboration strategies with Department A.",
+            },
+            {
+              startDate: "2025-01-15",
+              endDate: "2025-01-15",
+              name: "Project Deadline",
+              start: "T00:00:00",
+              end: "T23:59:59",
+              description:
+                "The final submission deadline for the ongoing project.",
+            },
+            {
+              startDate: "2025-01-20",
+              endDate: "2025-01-20",
+              name: "Team Building Event",
+              start: "T14:00:00",
+              end: "T17:00:00",
+              description:
+                "A fun afternoon for team bonding through various activities and games.",
+            },
+            {
+              startDate: "2024-12-29",
+              endDate: "2024-12-29",
+              name: "Client Presentation",
+              start: "T10:00:00",
+              end: "T11:30:00",
+              description:
+                "Present the final project proposal to the client for approval.",
+            },
+            {
+              startDate: "2024-12-29",
+              endDate: "2024-12-29",
+              name: "Team Strategy Session",
+              start: "T13:00:00",
+              end: "T15:00:00",
+              description:
+                "Discuss strategies and set goals for the upcoming quarter with the team.",
+            },
+            {
+              startDate: "2024-12-30",
+              endDate: "2024-12-30",
+              name: "Holiday Celebration",
+              start: "T11:00:00",
+              end: "T13:00:00",
+              description:
+                "Celebrate the holiday season with a company-wide event and lunch.",
+            },
+            {
+              startDate: "2024-12-30",
+              endDate: "2024-12-30",
+              name: "Year-End Review Meeting",
+              start: "T15:00:00",
+              end: "T16:30:00",
+              description:
+                "Review the accomplishments and challenges of the year, and plan for the next year.",
+            },
+          ])
+        );
+      }
+
+      // Variables to track the current year and month
+      let currentYear = new Date().getFullYear();
+      let currentMonth = new Date().getMonth();
+
+      // Helper function to format a date as YYYY-MM-DD
+      const formatDate = (date) => date.toISOString().split("T")[0];
+
+      // Check if a date falls within an event's range
+      const isDateInRange = (date, startDate, endDate) => {
+        const d = new Date(date);
+        return d >= new Date(startDate) && d <= new Date(endDate);
+      };
+
+      // Display events or a "No events" message for the clicked date
+      function displayEvents(selectedDate) {
+        const eventDisplay = document.getElementById("event-display");
+        eventDisplay.innerHTML = ""; // Clear previous content
+
+        const selectedEvents = JSON.parse(
+          localStorage.getItem("events")
+        ).filter((event) =>
+          isDateInRange(selectedDate, event.startDate, event.endDate)
+        );
+
+        if (selectedEvents.length > 0) {
+          // If there are events, display them
+          selectedEvents.forEach((event) => {
+            // Combine date and time for the current event
+            const startDateTime = new Date(event.startDate + event.start);
+            const endDateTime = new Date(event.endDate + event.end);
+
+            // Format the start and end time
+            const formattedStart = startDateTime.toLocaleString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            });
+            const formattedEnd = endDateTime.toLocaleString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            });
+
+            // Create the event element
+            const eventElement = document.createElement("div");
+            eventElement.classList.add("event");
+            eventElement.innerHTML = `
+    <p class="event-name">${event.name}</p>
+    <p>${event.description}</p>
+    <p><strong>From:</strong> ${formattedStart} <strong>To:</strong> ${formattedEnd}</p>
+  `;
+            eventDisplay.appendChild(eventElement);
+          });
+        } else {
+          // If no events, display a "No events" message
+          const noEventElement = document.createElement("p");
+          noEventElement.textContent = "No events for this date.";
+          eventDisplay.appendChild(noEventElement);
+        }
+      }
+
+      // Generate the calendar
+      function generateCalendar(year, month) {
+        const calendarElement = document.getElementById("calendar");
+        calendarElement.innerHTML = ""; // Clear previous calendar
+
+        const monthNames = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        document.getElementById(
+          "calendar-title"
+        ).textContent = `${monthNames[month]} ${year}`;
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        const table = document.createElement("table");
+        const thead = document.createElement("thead");
+        const trHead = document.createElement("tr");
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach((day) => {
+          const th = document.createElement("th");
+          th.textContent = day;
+          trHead.appendChild(th);
+        });
+        thead.appendChild(trHead);
+        table.appendChild(thead);
+
+        const tbody = document.createElement("tbody");
+        let date = 1;
+
+        for (let i = 0; i < 6; i++) {
+          const tr = document.createElement("tr");
+          for (let j = 0; j < 7; j++) {
+            const td = document.createElement("td");
+            if (i === 0 && j < firstDay) {
+              td.textContent = ""; // Empty cell for days before the first day
+            } else if (date > daysInMonth) {
+              break; // Stop adding cells after the last day
+            } else {
+              const fullDate = `${year}-${String(month + 1).padStart(
+                2,
+                "0"
+              )}-${String(date).padStart(2, "0")}`;
+              td.textContent = date;
+
+              // Add click event listener for all dates
+              td.addEventListener("click", () => displayEvents(fullDate));
+
+              // Highlight today's date
+              if (formatDate(new Date()) === fullDate) {
+                td.classList.add("today");
+              }
+
+              // Highlight dates that have events
+              JSON.parse(localStorage.getItem("events")).forEach((event) => {
+                if (isDateInRange(fullDate, event.startDate, event.endDate)) {
+                  td.classList.add("event-range");
+                }
+              });
+
+              date++;
+            }
+            tr.appendChild(td);
+          }
+          tbody.appendChild(tr);
+        }
+        table.appendChild(tbody);
+        calendarElement.appendChild(table);
+      }
+
+      // Initialize the calendar
+      function initCalendar() {
+        generateCalendar(currentYear, currentMonth);
+
+        document.getElementById("prev-month").addEventListener("click", () => {
+          currentMonth--;
+          if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+          }
+          generateCalendar(currentYear, currentMonth);
+        });
+
+        document.getElementById("next-month").addEventListener("click", () => {
+          currentMonth++;
+          if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+          }
+          generateCalendar(currentYear, currentMonth);
+        });
+      }
+
+      initCalendar();
+    </script>
+  </body>
+</html>

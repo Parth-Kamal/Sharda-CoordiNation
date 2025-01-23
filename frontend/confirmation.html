@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation - Project Schedule</title>
+    <style>
+        /* Styling similar to form.html for consistency */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 20px;
+        }
+        h2 {
+            color: #44576d;
+        }
+        .details-container, .schedule-table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .details-container th, .details-container td, .schedule-table th, .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .details-container th {
+            background-color: #28bf96;
+            color: #fff;
+            font-weight: bold;
+        }
+        .phase-row {
+            background-color: #dfebf6;
+            font-weight: bold;
+            text-align: left;
+        }
+        .task-cell {
+            background-color: #aac7d8;
+        }
+        .load-cell {
+            font-weight: bold;
+            color: #28bf96;
+        }
+        .color-indicator {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        /* Hide the schedule table initially */
+        .schedule-table {
+            display: none;
+        }
+
+        .button1 {
+            padding: 20px;
+            margin-top: 20px;
+
+        }
+
+        .button2 {
+            padding: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Project Confirmation</h2>
+
+<p>Your project details have been submitted successfully. Below is the project information and schedule:</p>
+
+<!-- Project Details Table -->
+<table class="details-container">
+    <tr><th>Project Name</th><td id="projectTitle"></td></tr>
+    <tr><th>Project ID</th><td id="projectId"></td></tr>
+    <tr><th>Project Type</th><td id="projectType"></td></tr>
+    <tr><th>Project Location</th><td id="projectLocation"></td></tr>
+    <tr><th>City/Region</th><td id="cityRegion"></td></tr>
+    <tr><th>Project Start Date</th><td id="startDate"></td></tr>
+    <tr><th>Project End Date</th><td id="endDate"></td></tr>
+    <tr><th>Department Name</th><td id="departmentName"></td></tr>
+    <tr><th>Project Manager Name</th><td id="projectManagerName"></td></tr>
+    <tr><th>Contact Number</th><td id="contactNumber"></td></tr>
+    <tr><th>Email</th><td id="email"></td></tr>
+    <tr><th>Contractor Name</th><td id="contractorName"></td></tr>
+</table>
+
+<!-- Button to Show Schedule Table -->
+<button class="button1" onclick="toggleSchedule()">Show Project Schedule</button>
+
+<button class="button2" onclick="sendEmailAndRedirect()">Send Email/Schedule</button>
+
+
+<!-- Project Schedule Table -->
+<!-- <table class="schedule-table" id="scheduleTable">
+    <thead>
+        <tr>
+            <th>Task Description</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Load</th>
+            <th>Color</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="phase-row">
+            <td colspan="5">Phase 1 Title</td>
+        </tr>
+        <tr>
+            <td class="task-cell">Task 1 </td>
+            <td id="startDate">2024-11-15</td>
+            <td id="endDate">2024-11-17</td>
+            <td class="load-cell">4</td>
+            <td><span class="color-indicator" style="background-color: #4CAF50;"></span>B</td>
+        </tr>
+
+        <tr>
+            <td class="task-cell">Task 2</td>
+            <td>2024-11-18</td>
+            <td>2024-11-20</td>
+            <td class="load-cell">4</td>
+            <td><span class="color-indicator" style="background-color: #8BC34A;"></span>G</td>
+        </tr>
+
+        <tr>
+            <td class="task-cell">Task 3</td>
+            <td>2024-11-21</td>
+            <td>2024-11-22</td>
+            <td class="load-cell">4</td>
+            <td><span class="color-indicator" style="background-color: #8BC34A;"></span>G</td>
+        </tr>
+
+        <tr>
+            <td class="task-cell">Task 4</td>
+            <td>2024-11-23</td>
+            <td>2024-11-25  </td>
+            <td class="load-cell">4</td>
+            <td><span class="color-indicator" style="background-color: #8BC34A;"></span>G</td>
+        </tr>
+
+        <tr>
+            <td class="task-cell">Task 5</td>
+            <td>2024-11-25</td>
+            <td>2024-11-27</td>
+            <td class="load-cell">4</td>
+            <td><span class="color-indicator" style="background-color: #8BC34A;"></span>G</td>
+        </tr>
+
+        <tr>
+            <td class="task-cell">Task 6</td>
+            <td>20/11/2024</td>
+            <td>27/11/2024</td>
+            <td class="load-cell">4</td>
+            <td><span class="color-indicator" style="background-color: #8BC34A;"></span>G</td>
+        </tr>
+    </tbody>
+</table> -->
+
+<script>
+    // Function to load data from localStorage and display in the table
+    function loadFormData() {
+        const formData = JSON.parse(localStorage.getItem('formData'));
+
+        if (formData) {
+            document.getElementById('projectTitle').textContent = formData.projectTitle || '';
+            document.getElementById('projectId').textContent = formData.projectId || '';
+            document.getElementById('projectType').textContent = formData.projectType || '';
+            document.getElementById('projectLocation').textContent = formData.projectLocation || '';
+            document.getElementById('cityRegion').textContent = formData.cityRegion || '';
+            document.getElementById('startDate').textContent = formData.startDate || '';
+            document.getElementById('endDate').textContent = formData.endDate || '';
+            document.getElementById('departmentName').textContent = formData.departmentName || '';
+            document.getElementById('projectManagerName').textContent = formData.projectManagerName || '';
+            document.getElementById('contactNumber').textContent = formData.contactNumber || '';
+            document.getElementById('email').textContent = formData.email || '';
+            document.getElementById('contractorName').textContent = formData.contractorName || '';
+        } else {
+            console.error("No form data found in localStorage.");
+        }
+    }
+
+    // Function to toggle the visibility of the schedule table
+    function toggleSchedule() {
+        // window.location.href = 'chart.html'; 
+        window.open('chart.html', '_blank'); 
+        const scheduleTable = document.getElementById('scheduleTable');
+        if (scheduleTable.style.display === "none" || scheduleTable.style.display === "") {
+            scheduleTable.style.display = "table"; // Show table
+        } else {
+            scheduleTable.style.display = "none"; // Hide table
+        }
+    }
+
+    function sendEmailAndRedirect() {
+        // Simulate email sending (Add actual email sending code if integrated with backend)
+        alert("Email sent and schedule created!");
+
+        // Redirect to another page after email is sent
+        // window.location.href = 'schedule.html'; // Redirect to the desired webpage
+    }
+
+    // Load form data when the page loads
+    window.onload = loadFormData;
+</script>
+
+</body>
+</html>

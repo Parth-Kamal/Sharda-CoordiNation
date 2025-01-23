@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="shortcut icon" href="./images/logo.png" type="image/x-icon">
+    <title>CoordiNation</title>
+    
+  </head>
+  <style>
+/* Team Section Styles */
+.team-section {
+  padding: 60px 20px;
+  background-color: #f4f8fc;
+}
+
+.section-title {
+  margin-bottom: 40px;
+}
+
+.section-title h3 {
+  font-size: 2rem;
+  color: #333;
+  font-weight: bold;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title h3 span {
+  color: #0073e6;
+}
+
+.team-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  align-items: stretch;
+}
+
+.team-member {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-member:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.team-member img {
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  margin-bottom: 20px;
+  border: 5px solid #0073e6;
+  transition: border-color 0.3s;
+}
+
+.team-member:hover img {
+  border-color: #005bb5;
+}
+
+.team-member h4 {
+  font-size: 1.25rem;
+  color: #333;
+  margin: 10px 0 5px;
+  font-weight: bold;
+}
+
+.team-member p {
+  font-size: 0.9rem;
+  color: #777;
+  margin: 5px 0 10px;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.social-links a {
+  font-size: 20px;
+  color: #555;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.social-links a:hover {
+  color: #0073e6;
+  transform: scale(1.2);
+}
+.social-links a i {
+  display: inline-block;
+  line-height: 1;
+  margin: 0 5px;
+}
+
+/* Media Query for Smaller Screens */
+@media (max-width: 768px) {
+  .team-member img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .team-member h4 {
+    font-size: 1.1rem;
+  }
+
+  .team-member p {
+    font-size: 0.85rem;
+  }
+}
+
+  </style>
+  <body>
+    <div class="landing-container">
+      <nav>
+        <div class="nav__logo">CoordiNation</div>
+        <ul class="nav__links">
+          <li class="link"><a href="#home">Home</a></li>
+          <li class="link"><a href="#about">About Us</a></li>
+          <li class="link"><a href="#">Contact</a></li>
+        </ul>
+        <button class="btn">
+          <a href="login.html" style="text-decoration: none; color: #fff"
+            >Register Now</a
+          >
+        </button>
+      </nav>
+      <header class="header">
+        <div id="home" class="content">
+          <h1><span>Smart Urban</span><br />Collaboration Platform</h1>
+          <p>
+            A digital solution for seamless cooperation between city
+            Departments. Streamline resource sharing, project planning, and
+            unified implementation across agencies. Enhance coordination to
+            minimize delays and optimize urban planning.
+          </p>
+          <button class="btn">
+            <a href="login.html" style="text-decoration: none; color: #fff"
+              >Get Started</a
+            >
+          </button>
+        </div>
+        <div class="landing-image">
+          <span class="image__bg"></span>
+          <img src="./images/header-bg.webp" alt="header image" />
+          <div class="image__content image__content__1">
+            <span><i class="ri-user-3-line"></i></span>
+            <div class="details">
+              <h4>20+</h4>
+              <p>Active Departments</p>
+            </div>
+          </div>
+          <div class="image__content image__content__2">
+            <ul>
+              <li>
+                <span><i class="ri-check-line"></i></span>
+                Join Now and Enhance Inter-departmental Cooperation
+              </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+
+      <header id="about" class="header">
+        <div class="landing-image about-image">
+          <span class="image__bg"></span>
+          <img src="./images/about.webp" alt="header image" />
+        </div>
+
+        <div id="home" class="content">
+          <h1><span>About Us</span></h1>
+          <p>
+            Our platform is designed to bring together city departments,
+            agencies, and stakeholders to foster inter-departmental cooperation
+            in urban development. By providing a unified space for sharing data,
+            resources, and expertise, we streamline project planning and
+            execution, ensuring efficient utilization of resources and
+            preventing project delays caused by miscoordination.
+          </p>
+          <p>
+            With features like real-time collaboration, task scheduling, and
+            project phasing tools, our platform enables seamless communication
+            and coordination across various city authorities. We aim to enhance
+            urban governance, reduce operational costs, and create smarter, more
+            organized cities for the future.
+          </p>
+        </div>
+      </header>
+
+      <section id="team" class="team-section">
+        <div class="container">
+          <div class="section-title text-center">
+            <h3 class="title">Meet the <span>Team</span></h3>
+            <p>Our dedicated team works tirelessly to ensure the platform is a success.</p>
+          </div>
+          <div class="team-container">
+            <!-- Team Member 1 -->
+            <div class="team-member">
+              <img src="team/parth.jpeg" alt="Parth Kamal" />
+              <h4>Parth Kamal</h4>
+              <p>Team Lead</p>
+              <p>ML Engineer</p>
+              <div class="social-links">
+                <a href="https://www.linkedin.com/in/parth-kamal-025422293" target="_blank" title="LinkedIn">
+                  <i class="ri-linkedin-box-fill"></i>
+                </a>
+                <a href="https://github.com/Parth-Kamal" target="_blank" title="GitHub">
+                  <i class="ri-github-fill"></i>
+                </a>
+              </a>
+              <a href="https://parthkamal.netlify.app/" target="_blank" title="Portfolio">
+                <i class="ri-global-line"></i>
+              </a>    
+              </div>
+            </div>
+            <!-- Team Member 2 -->
+            <div class="team-member">
+              <img src="team/vansh-shandilya.jpg" alt="Vansh Shandilya" />
+              <h4>Vansh Shandilya</h4>
+              <p>Back-End Developer</p>
+              <div class="social-links">
+                <a href="https://www.linkedin.com/in/vansh-shandilya-b57673210" target="_blank" title="LinkedIn">
+                  <i class="ri-linkedin-box-fill"></i>
+                </a>
+                <a href="https://github.com/Van-sh" target="_blank" title="GitHub">
+                  <i class="ri-github-fill"></i>
+                </a>
+              </a>
+              <a href="https://parth-kamal-portfolio.com" target="_blank" title="Portfolio">
+                <i class="ri-global-line"></i>
+              </a>
+              </div>
+            </div>
+            <!-- Team Member 3 -->
+            <div class="team-member">
+              <img src="team/piyush.jpeg" alt="Ansh Yadav" />
+              <h4>Kumar Piyush</h4>
+              <p>Front-End Developer</p>
+              <div class="social-links">
+                <a href="https://linkedin.com/in/kumar-piyush-1314ba1b9" target="_blank" title="LinkedIn">
+                  <i class="ri-linkedin-box-fill"></i>
+                </a>
+                <a href="https://github.com/Kumar2004-2009" target="_blank" title="GitHub">
+                  <i class="ri-github-fill"></i>
+                </a>
+              </a>
+              <a href="https://kumar-piyush-portfolio.netlify.app/" target="_blank" title="Portfolio">
+                <i class="ri-global-line"></i>
+              </a>    
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>  
+    </div>
+    <!-- <div class="newsletter-container">
+        <h2>Sign up for our newsletter</h2>
+        <p>Stay up to date with the roadmap progress, announcements and exclusive discounts. Feel free to sign up with your email.</p>
+        <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email" required>
+            <button type="submit">Subscribe</button>
+        </form>
+        <p class="privacy-notice">We care about the protection of your data. <a href="#">Read our Privacy Policy.</a></p>
+    </div> -->
+  </body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Management</title>
+    <link rel="shortcut icon" href="./images//logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="navbar">
+        <nav class="company-navbar">
+          <div class="company-navbar-left">
+            <img
+              src="./images/logo.png"
+              alt="Company Logo"
+              class="company-logo"
+            />
+            <span class="company-name">CoordiNation</span>
+          </div>
+          <div class="company-navbar-right">
+            <button class="company-contact-us">
+              <a href="#contact">Contact Us</a>
+            </button>
+          </div>
+        </nav>
+        <div class="burger" onclick="toggleMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ul class="nav-list">
+            <li><a href="index.html#dashboard" class="nav-link">Dashboard</a></li>
+            <li><a href="task.html" class="nav-link">Tasks</a></li>
+            <li><a href="project.html" class="nav-link">Projects</a></li>
+            <li><a href="resource.html" class="nav-link">Resources</a></li>
+            <li><a href="index.html#calendar" class="nav-link">Calendar</a></li>
+            <li><a href="userdetail.html" class="nav-link">Profiles</a></li>
+            <li><a href="index.html#map-section" class="nav-link">Location</a></li>
+            <li><a href="index.html#documents" class="nav-link">Documents</a></li>
+            <li><a href="index.html#forum" class="nav-link">Forum</a></li>
+            <li>
+              <a href="/login.html" id="logout-link" class="nav-link">LogOut</a>
+            </li>
+          </ul>
+      </header>
+    <div class="resource-container">
+        <h1>Resource Management</h1>
+
+        <section class="form-section hidden" id="admin-section">
+          <h2>Create/Update Resource</h2>
+          <form id="resource-form">
+            <input type="hidden" id="resource-id" />
+            <div>
+              <label for="title">Title:</label>
+              <input type="text" id="title" required />
+            </div>
+            <div>
+              <label for="description">Description:</label>
+              <textarea id="description" required></textarea>
+            </div>
+            <div>
+              <label for="department">Department:</label>
+              <input type="text" id="department-re" required />
+            </div>
+            <div>
+              <label for="status">Status:</label>
+              <select id="status" required>
+                <option value="available">Available</option>
+                <option value="inuse">In Use</option>
+              </select>
+            </div>
+            <button class="resource-button" type="submit">Submit</button>
+          </form>
+        </section>
+
+        <section class="resource-list">
+          <h2>All Resources</h2>
+          <div id="resources-container"></div>
+        </section>
+      </div>
+
+      <script>
+        const apiBaseUrl = "http://localhost:8000/api/resources";
+  
+        const getAuthToken = () => localStorage.getItem("token");
+  
+        const fetchResources = async () => {
+          const token = getAuthToken();
+          const res = await fetch(apiBaseUrl, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const data = await res.json();
+          if (data.success) {
+            displayResources(data.resources);
+          } else {
+            alert(data.message);
+          }
+        };
+  
+        const createOrUpdateResource = async (event) => {
+          event.preventDefault();
+          const id = document.getElementById("resource-id").value;
+          const title = document.getElementById("title").value.trim();
+          const description = document.getElementById("description").value.trim();
+          const department = document.getElementById("department-re").value.trim();
+          const status = document.getElementById("status").value;
+  
+          if (!title || !description || !department || !status) {
+            alert("Please fill in all fields.");
+            return;
+          }
+  
+          const method = id ? "PUT" : "POST";
+          const endpoint = id ? `${apiBaseUrl}/${id}` : apiBaseUrl;
+          const token = getAuthToken();
+  
+          const res = await fetch(endpoint, {
+            method,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ title, description, department, status }),
+          });
+  
+          const data = await res.json();
+  
+          if (data.success) {
+            alert(data.message);
+            document.getElementById("resource-form").reset();
+            document.getElementById("resource-id").value = "";
+            fetchResources();
+          } else {
+            alert(data.message || "An error occurred.");
+          }
+        };
+  
+        const deleteResource = async (id) => {
+          const token = getAuthToken();
+          const res = await fetch(`${apiBaseUrl}/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert(data.message);
+            fetchResources();
+          } else {
+            alert(data.message);
+          }
+        };
+  
+        const editResource = (resource) => {
+          document.getElementById("resource-id").value = resource._id;
+          document.getElementById("title").value = resource.title;
+          document.getElementById("description").value = resource.description;
+          document.getElementById("department").value = resource.department;
+          document.getElementById("status").value = resource.status;
+        };
+  
+        const displayResources = (resources) => {
+          const container = document.getElementById("resources-container");
+          container.innerHTML = "";
+          resources.forEach((resource) => {
+            const div = document.createElement("div");
+            div.className = "resource";
+            div.innerHTML = `
+              <h3>${resource.title}</h3>
+              <p>${resource.description}</p>
+              <p>Department: ${resource.department}</p>
+              <p>Status: ${resource.status}</p>
+              ${
+                role === "admin"
+                  ? `
+                <button class="resource-edit-button" onclick='editResource(${JSON.stringify(
+                  resource
+                )})'>Edit</button>
+                <button class="resource-delete-button" onclick='deleteResource("${
+                  resource._id
+                }")'>Delete</button>
+              `
+                  : ""
+              }
+            `;
+            container.appendChild(div);
+          });
+        };
+  
+        const role = JSON.parse(localStorage.getItem("user")).role;
+  
+        if (role === "admin") {
+          document.getElementById("admin-section").classList.remove("hidden");
+        }
+  
+        document
+          .getElementById("resource-form")
+          .addEventListener("submit", createOrUpdateResource);
+  
+        fetchResources();
+      </script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      .b {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #0077b6;
+        color: white;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #023e8a;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        box-sizing: border-box;
+      }
+
+      textarea {
+        resize: none;
+        height: 100px;
+      }
+      .profile-pic-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .profile-pic-container img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      @media (max-width: 600px) {
+        .profile-pic-container img {
+          width: 80px;
+          height: 80px;
+        }
+      }
+      #cancel-button {
+        background-color: #c1d3fe;
+        color: #000;
+        margin-top: 10px;
+      }
+
+      #cancel-button:hover {
+        background-color: #abc4ff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="customAlert" class="alert-box">
+      <div class="alert-content">
+        <span class="alert-message" id="alertMessage"
+          >This is an alert message</span
+        >
+        <button onclick="closeAlert()" class="alert-button">OK</button>
+      </div>
+    </div>
+    <header class="navbar">
+      <nav class="company-navbar">
+        <div class="company-navbar-left">
+          <img
+            src="./images/logo.png"
+            alt="Company Logo"
+            class="company-logo"
+          />
+          <span class="company-name">CoordiNation</span>
+        </div>
+        <div class="company-navbar-right">
+          <button class="company-contact-us">
+            <a href="#contact">Contact Us</a>
+          </button>
+        </div>
+      </nav>
+      <div class="burger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="nav-list">
+        <li><a href="index.html#dashboard" class="nav-link">Dashboard</a></li>
+        <li><a href="task.html" class="nav-link">Tasks</a></li>
+        <li><a href="project.html" class="nav-link">Projects</a></li>
+        <li><a href="resource.html" class="nav-link">Resources</a></li>
+        <li><a href="index.html#calendar" class="nav-link">Calendar</a></li>
+        <li><a href="userdetail.html" class="nav-link">Profiles</a></li>
+        <li><a href="index.html#map-section" class="nav-link">Location</a></li>
+        <li><a href="index.html#documents" class="nav-link">Documents</a></li>
+        <li><a href="index.html#forum" class="nav-link">Forum</a></li>
+        <li>
+          <a href="/login.html" id="logout-link" class="nav-link">LogOut</a>
+        </li>
+      </ul>
+    </header>
+    <div class="b">
+      <div class="profile-container">
+        <div class="profile-pic-container">
+          <img
+            id="profilePic"
+            src="https://cdn-icons-png.freepik.com/512/3682/3682323.png"
+            alt="Profile Picture"
+          />
+        </div>
+        <h2 id="username"></h2>
+        <div class="user-details" id="details-container">
+          <p><strong>Email:</strong> <span id="email"></span></p>
+          <p><strong>Department:</strong> <span id="department"></span></p>
+          <p id="bio-display" style="display: none">
+            <strong>Bio:</strong> <span id="bio"></span>
+          </p>
+          <p><strong>Role:</strong> <span id="role"></span></p>
+        </div>
+
+        <button id="edit-button">Edit Profile</button>
+      </div>
+
+      <div id="overlay"></div>
+
+      <div id="edit-section">
+        <h3>Edit Your Profile</h3>
+        <form id="edit-form" enctype="multipart/form-data">
+          <label for="name">Name:</label>
+          <input type="text" id="name" required />
+          <label for="department">Department:</label>
+          <input type="text" id="departmentInput" required />
+          <label for="bio">Bio:</label>
+          <textarea id="bio-input"></textarea>
+          <label for="profile-image">Upload Profile Picture:</label>
+          <input type="file" id="profilePics" accept="image/*" />
+          <button type="submit">Save Changes</button>
+          <button type="button" id="cancel-button">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
+    <script>
+      const apiURL = "http://localhost:8000/auth";
+      const user = JSON.parse(localStorage.getItem("user"));
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        showAlert("No token found. Please log in.");
+        window.location.href = "login.html";
+      }
+
+      if (user) {
+        document.getElementById("username").innerText = user.name;
+        document.getElementById("email").innerText = user.email;
+        document.getElementById("department").innerText = user.department;
+        document.getElementById("role").innerText = user.role;
+
+        if (user.bio) {
+          document.getElementById("bio-display").style.display = "block";
+          document.getElementById("bio").innerText = user.bio;
+        }
+      }
+
+      const editButton = document.getElementById("edit-button");
+      const editSection = document.getElementById("edit-section");
+      const overlay = document.getElementById("overlay");
+      const detailsContainer = document.getElementById("details-container");
+
+      editButton.addEventListener("click", () => {
+        editSection.style.display = "block";
+        overlay.style.display = "block";
+        detailsContainer.classList.add("blurred");
+
+        document.getElementById("name").value = user.name;
+        document.getElementById("departmentInput").value = user.department;
+        document.getElementById("bio-input").value = user.bio || "";
+      });
+
+      const profilePic = document.getElementById("profilePic");
+      if (user && user.profilePic) {
+        profilePic.src = `http://localhost:8000${user.profilePic}`;
+      }
+
+      document
+        .getElementById("edit-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const formData = new FormData();
+          formData.append("name", document.getElementById("name").value);
+          formData.append(
+            "department",
+            document.getElementById("departmentInput").value
+          );
+          formData.append("bio", document.getElementById("bio-input").value);
+
+          const profilePic = document.getElementById("profilePics").files[0];
+          if (profilePic) {
+            formData.append("profilePic", profilePic);
+          }
+
+          try {
+            const response = await fetch(`${apiURL}/update`, {
+              method: "PUT",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              body: formData,
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              showAlert("Profile updated successfully");
+              localStorage.setItem("user", JSON.stringify(result.user));
+
+              document.getElementById("username").innerText = result.user.name;
+              document.getElementById("department").innerText =
+                result.user.department;
+
+              if (result.user.profilePic) {
+                profilePic.src = `http://localhost:8000${result.user.profilePic}`;
+              }
+
+              if (result.user.bio) {
+                document.getElementById("bio-display").style.display = "block";
+                document.getElementById("bio").innerText = result.user.bio;
+              } else {
+                document.getElementById("bio-display").style.display = "none";
+              }
+
+              editSection.style.display = "none";
+              overlay.style.display = "none";
+              detailsContainer.classList.remove("blurred");
+              window.location.reload();
+            } else {
+              showAlert(result.message || "Profile update failed");
+            }
+          } catch (error) {
+            console.error("Error updating profile:", error);
+          }
+        });
+
+      const cancelButton = document.getElementById("cancel-button");
+      cancelButton.addEventListener("click", () => {
+        editSection.style.display = "none";
+        overlay.style.display = "none";
+        detailsContainer.classList.remove("blurred");
+      });
+    </script>
+  </body>
+</html>

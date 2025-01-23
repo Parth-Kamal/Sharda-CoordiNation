@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User-Profile</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="./images/logo.png" type="image/x-icon">
+    <style>
+      body {
+        margin: 0;
+        font-family: "Outfit", sans-serif;
+        background-color: #f3f3f3;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .card {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        background-color: #0077b6;
+        color: #fff;
+      }
+
+      .card h3 {
+        margin: 0;
+        font-size: 25px;
+        margin-bottom: 5px;
+      }
+
+      .card p {
+        margin: 5px 0;
+        font-size: 18px;
+      }
+
+      .btn {
+        background-color: #0077b6;
+        color: white;
+        border: 2px solid #fff; /* Correct shorthand usage */
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 5px;
+      }
+
+      .btn:hover {
+        background-color: #005f8a;
+      }
+
+      .form-container {
+        display: none;
+        flex-direction: column;
+      }
+
+      .form-container.active {
+        display: flex;
+      }
+
+      .form-container label {
+        margin-bottom: 5px;
+        font-size: 14px;
+      }
+
+      .form-container input,
+      .form-container textarea,
+      .form-container select {
+        margin-bottom: 15px;
+        padding: 10px;
+        font-size: 16px;
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      .form-container textarea {
+        resize: none;
+      }
+
+      .form-container button {
+        width: 100%;
+      }
+      .back-arrow {
+        font-size: 18px;
+        font-weight: bold;
+        color: black;
+        padding: 10px 20px;
+        cursor: pointer;
+        display: inline-block;
+        background-color: #f3f3f3;
+      }
+
+      .back-arrow:hover {
+        color: #005f8a;
+        text-decoration: none;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          margin: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="back-arrow" onclick="goBack()">&larr; Back</div>
+    <div class="container">
+      <!-- Profile Card -->
+      <div class="card">
+        <h3>Profile</h3>
+        <p>
+          <strong>Username:</strong>
+          <span id="usernameDisplay">Not filled yet</span>
+        </p>
+        <p>
+          <strong>Phone:</strong> <span id="phoneDisplay">Not filled yet</span>
+        </p>
+        <p>
+          <strong>Locality:</strong>
+          <span id="localityDisplay">Not filled yet</span>
+        </p>
+        <button class="btn" onclick="openEditForm()">Edit</button>
+      </div>
+
+      <!-- Edit Form -->
+      <div class="form-container" id="editForm">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" />
+
+        <label for="phone">Phone</label>
+        <input type="text" id="phone" placeholder="Enter phone" />
+
+        <label for="district">District</label>
+        <input type="text" id="district" placeholder="Enter district" />
+
+        <label for="bio">Bio</label>
+        <textarea id="bio" rows="3" placeholder="Write a short bio"></textarea>
+
+        <label for="locality">Locality</label>
+        <input type="text" id="locality" placeholder="Enter locality" />
+
+        <button class="btn" onclick="saveProfile()">Submit</button>
+      </div>
+    </div>
+
+    <script>
+      // Function to open the edit form
+      function openEditForm() {
+        document.getElementById("editForm").classList.add("active");
+      }
+
+      // Function to save the profile data in local storage
+      function saveProfile() {
+        const username = document.getElementById("username").value;
+        const phone = document.getElementById("phone").value;
+        const district = document.getElementById("district").value;
+        const bio = document.getElementById("bio").value;
+        const locality = document.getElementById("locality").value;
+
+        const profileData = {
+          username,
+          phone,
+          district,
+          bio,
+          locality,
+        };
+
+        localStorage.setItem("profile", JSON.stringify(profileData));
+        window.location.href="user.html" // Reload the page to fetch the updated data
+      }
+
+      // Function to load the profile data on page load
+      function loadProfile() {
+        const profile = JSON.parse(localStorage.getItem("profile"));
+
+        if (profile) {
+          document.getElementById("usernameDisplay").innerText =
+            profile.username || "Not filled yet";
+          document.getElementById("phoneDisplay").innerText =
+            profile.phone || "Not filled yet";
+          document.getElementById("localityDisplay").innerText =
+            profile.locality || "Not filled yet";
+        }
+      }
+
+      // Call loadProfile on page load
+      window.onload = loadProfile;
+
+      function goBack() {
+        window.location.href = "user.html"; // Redirect to user.html
+      }
+    </script>
+  </body>
+</html>

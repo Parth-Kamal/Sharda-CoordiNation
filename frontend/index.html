@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoordiNation</title>
+    <link rel="shortcut icon" href="./images/logo.png" type="image/x-icon">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/fullcalendar@5.10.1/main.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha512-xODcA3CkOHxqkLpUATzfgBmxMFnDWjOD8I+QnG8qVEW7+1lZWj8Amrcff3Oi/gFZ6tdhZQ6Nr9jwLxTn31rjkQ=="
+      crossorigin=""
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      if (!localStorage.getItem("hasRedirected")) {
+        localStorage.setItem("hasRedirected", "true");
+        window.location.href = "landing.html";
+      }
+    </script>
+  </head>
+  <body>
+    <header class="navbar">
+      <nav class="company-navbar">
+        <div class="company-navbar-left">
+          <img
+            src="./images/logo.png"
+            alt="Company Logo"
+            class="company-logo"
+          />
+          <span class="company-name">CoordiNation</span>
+        </div>
+        <div class="company-navbar-right">
+          <button class="company-contact-us">
+            <a href="#contact">Contact Us</a>
+          </button>
+        </div>
+      </nav>
+      <div class="burger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="nav-list">
+        <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+        <li><a href="task.html" class="nav-link">Tasks</a></li>
+        <li><a href="project.html" class="nav-link">Projects</a></li>
+        <li><a href="resource.html" class="nav-link">Resources</a></li>
+        <li><a href="#calendar" class="nav-link">Calendar</a></li>
+        <li><a href="userdetail.html" class="nav-link">Profiles</a></li>
+        <li><a href="#map-section" class="nav-link">Location</a></li>
+        <li><a href="#documents" class="nav-link">Documents</a></li>
+        <li><a href="#forum" class="nav-link">Forum</a></li>
+        <li>
+          <a href="/login.html" id="logout-link" class="nav-link">LogOut</a>
+        </li>
+      </ul>
+    </header>
+
+    <main>
+      <!-- Dashboard Section -->
+      <section id="dashboard" class="section">
+        <div class="container">
+          <h2>Dashboard</h2>
+          <div class="dashboard-overview grid-container">
+            <div class="dashboard-item card">
+              <h3>Total Departments</h3>
+              <p id="total-departments">3</p>
+            </div>
+            <div class="dashboard-item card">
+              <h3>Ongoing Projects</h3>
+              <p id="ongoing-projects">2</p>
+            </div>
+            <div class="dashboard-item card">
+              <h3>Active Tasks</h3>
+              <p id="active-tasks">3</p>
+            </div>
+            <div class="dashboard-item card">
+              <h3>Upcoming Events</h3>
+              <p id="upcoming-events">3</p>
+            </div>
+          </div>
+          <canvas id="projectChart" class="chart"></canvas>
+        </div>
+      </section>
+      <!-- Task Management Section  -->
+
+      
+
+      <!-- Project Management Section -->
+
+      <!-- SOON -->
+
+      <!-- Projects Section -->
+
+      <!-- Resource Management Section -->
+
+      
+
+      <!-- Chatbot Section -->
+      <div id="chatbot">
+        <div id="chatbot-button" onclick="toggleChat()">
+          <img src="./images/bot.png" alt="Chatbot" />
+        </div>
+
+        <div id="chatbot-window" style="display: none">
+          <div id="chatbot-header">
+            <h4>How can I help you?</h4>
+            <button id="close-button" onclick="toggleChat()">×</button>
+          </div>
+
+          <!-- Chatbot messages section -->
+          <div id="chatbot-messages"></div>
+
+          <!-- Input section to type messages -->
+          <div id="chatbot-input-container">
+            <input
+              type="text"
+              id="chatbot-input"
+              placeholder="Type your message..."
+            />
+            <button id="send-button">Send</button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="calendar-container">
+        <!-- Calendar Section -->
+        <div class="calendar">
+          <div class="calendar-header">
+            <button id="prev-month">Previous</button>
+            <h2 id="calendar-title"></h2>
+            <button id="next-month">Next</button>
+          </div>
+          <div id="calendar"></div>
+        </div>
+
+        <!-- Event Details Section -->
+        <div class="calendar-sidebar">
+          <div id="event-display">
+            <h3>Event Details</h3>
+            <p>Select a date to see the events</p>
+          </div>
+          <div class="hidden" id="add-event">
+            <a class="button" id="add-event-button" href="/events.html">Add Event</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map Section -->
+      <section id="map-section" class="section">
+        <div class="container">
+          <h2>Work Location Map</h2>
+          <div id="map" style="height: 400px"></div>
+        </div>
+      </section>
+
+      <!-- Document Management Section -->
+      <section id="documents" class="section">
+        <div class="container">
+          <h2>Document Management</h2>
+          <input
+            type="file"
+            id="documentInput"
+            accept=".pdf, image/*"
+            style="display: none"
+            onchange="handleFileUpload(event)"
+          />
+          <button
+            class="btn primary-btn"
+            onclick="document.getElementById('documentInput').click()"
+          >
+            Upload Document
+          </button>
+          <div id="documentList" class="card">
+            <h3>Documents</h3>
+            <ul id="documentsUl">
+              <!-- Dynamic document entries will be inserted here -->
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Forum Section -->
+      <section id="forum" class="section">
+        <div class="container">
+          <h2>Discussion Forum</h2>
+          <div id="forumPosts" class="card">
+            <p>No posts yet. Start a discussion!</p>
+          </div>
+          <textarea
+            id="newPost"
+            class="textarea"
+            placeholder="Write a new post..."
+          ></textarea>
+          <button class="btn primary-btn" onclick="addPost()">Post</button>
+        </div>
+      </section>
+
+      <!-- Contact Us Form -->
+      <div class="contact-section" id="contact">
+        <h2>Contact Us</h2>
+        <p>
+          Get in touch with your desired department or ask your questions. We'd
+          love to hear from you!
+        </p>
+
+        <div class="contact-card">
+          <form id="contactForm">
+            <label for="name">Your Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Enter your name"
+              required
+            />
+
+            <label for="email">Your Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              required
+            />
+
+            <label for="department">Department</label>
+            <select id="department" name="department" required>
+              <option value="" disabled selected>Select a department</option>
+              <option value="road">Road Department</option>
+              <option value="WaterPipeline">WaterPipeline Department</option>
+              <option value="GasPipeline">GasPipeline Department</option>
+            </select>
+
+            <label for="message">Your Message</label>
+            <textarea
+              id="message"
+              name="message"
+              rows="5"
+              placeholder="Type your message"
+              required
+            ></textarea>
+
+            <button type="submit">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2024 CoordiNation_India Platform</p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg=="
+      crossorigin=""
+    ></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+    <script>
+      const userData_task_event = JSON.parse(localStorage.getItem("user"));
+      const add_event = document.getElementById("add-event");
+      if (userData_task_event?.role === "admin") {
+        add_event.classList.remove("hidden")
+      }
+    </script>
+
+    <script>
+      const userData_task = JSON.parse(localStorage.getItem("user"));
+      const task_form = document.getElementById("task-form");
+      
+      if (userData_task?.role === "admin") {
+        task_form.classList.remove("hidden");
+        add_event.classList.remove("hidden")
+      }
+    </script>
+
+
+    <script>
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        window.location.href = "login.html";
+      }
+
+      document
+        .getElementById("logout-link")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          window.location.href = "login.html";
+        });
+
+      const contactForm = document.getElementById("contactForm");
+
+      contactForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const department = document.getElementById("department").value;
+        const message = document.getElementById("message").value;
+
+        try {
+          const response = await fetch("http://localhost:8000/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, department, message }),
+          });
+          const result = await response.json();
+          alert(result.message);
+          if (result.success) {
+            contactForm.reset();
+          }
+        } catch (error) {
+          console.error("Error submitting contact form:", error);
+          alert("Failed to send the message. Please try again.");
+        }
+      });
+    </script>
+
+    <script>
+      if (!localStorage.getItem("events")){
+      localStorage.setItem("events", JSON.stringify([
+        {
+          startDate: "2025-01-10",
+          endDate: "2025-01-10",
+          name: "Meeting with Dept. A",
+          start: "T09:00:00",
+          end: "T10:00:00",
+          description:
+            "Discuss upcoming projects and collaboration strategies with Department A.",
+        },
+        {
+          startDate: "2025-01-15",
+          endDate: "2025-01-15",
+          name: "Project Deadline",
+          start: "T00:00:00",
+          end: "T23:59:59",
+          description: "The final submission deadline for the ongoing project.",
+        },
+        {
+          startDate: "2025-01-20",
+          endDate: "2025-01-20",
+          name: "Team Building Event",
+          start: "T14:00:00",
+          end: "T17:00:00",
+          description:
+            "A fun afternoon for team bonding through various activities and games.",
+        },
+        {
+          startDate: "2024-12-29",
+          endDate: "2024-12-29",
+          name: "Client Presentation",
+          start: "T10:00:00",
+          end: "T11:30:00",
+          description:
+            "Present the final project proposal to the client for approval.",
+        },
+        {
+          startDate: "2024-12-29",
+          endDate: "2024-12-29",
+          name: "Team Strategy Session",
+          start: "T13:00:00",
+          end: "T15:00:00",
+          description:
+            "Discuss strategies and set goals for the upcoming quarter with the team.",
+        },
+        {
+          startDate: "2024-12-30",
+          endDate: "2024-12-30",
+          name: "Holiday Celebration",
+          start: "T11:00:00",
+          end: "T13:00:00",
+          description:
+            "Celebrate the holiday season with a company-wide event and lunch.",
+        },
+        {
+          startDate: "2024-12-30",
+          endDate: "2024-12-30",
+          name: "Year-End Review Meeting",
+          start: "T15:00:00",
+          end: "T16:30:00",
+          description:
+            "Review the accomplishments and challenges of the year, and plan for the next year.",
+        },
+      ]));}
+
+      // Variables to track the current year and month
+      let currentYear = new Date().getFullYear();
+      let currentMonth = new Date().getMonth();
+
+      // Helper function to format a date as YYYY-MM-DD
+      const formatDate = (date) => date.toISOString().split("T")[0];
+
+      // Check if a date falls within an event's range
+      const isDateInRange = (date, startDate, endDate) => {
+        const d = new Date(date);
+        return d >= new Date(startDate) && d <= new Date(endDate);
+      };
+
+      // Display events or a "No events" message for the clicked date
+      function displayEvents(selectedDate) {
+        const eventDisplay = document.getElementById("event-display");
+        eventDisplay.innerHTML = ""; // Clear previous content
+
+        const selectedEvents = JSON.parse(localStorage.getItem("events")).filter((event) =>
+          isDateInRange(selectedDate, event.startDate, event.endDate)
+        );
+
+        if (selectedEvents.length > 0) {
+          // If there are events, display them
+          selectedEvents.forEach((event) => {
+            // Combine date and time for the current event
+            const startDateTime = new Date(event.startDate + event.start);
+            const endDateTime = new Date(event.endDate + event.end);
+
+            // Format the start and end time
+            const formattedStart = startDateTime.toLocaleString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            });
+            const formattedEnd = endDateTime.toLocaleString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            });
+
+            // Create the event element
+            const eventElement = document.createElement("div");
+            eventElement.classList.add("event");
+            eventElement.innerHTML = `
+        <p class="event-name">${event.name}</p>
+        <p>${event.description}</p>
+        <p><strong>From:</strong> ${formattedStart} <strong>To:</strong> ${formattedEnd}</p>
+      `;
+            eventDisplay.appendChild(eventElement);
+          });
+        } else {
+          // If no events, display a "No events" message
+          const noEventElement = document.createElement("p");
+          noEventElement.textContent = "No events for this date.";
+          eventDisplay.appendChild(noEventElement);
+        }
+      }
+
+      // Generate the calendar
+      function generateCalendar(year, month) {
+        const calendarElement = document.getElementById("calendar");
+        calendarElement.innerHTML = ""; // Clear previous calendar
+
+        const monthNames = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        document.getElementById(
+          "calendar-title"
+        ).textContent = `${monthNames[month]} ${year}`;
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        const table = document.createElement("table");
+        const thead = document.createElement("thead");
+        const trHead = document.createElement("tr");
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach((day) => {
+          const th = document.createElement("th");
+          th.textContent = day;
+          trHead.appendChild(th);
+        });
+        thead.appendChild(trHead);
+        table.appendChild(thead);
+
+        const tbody = document.createElement("tbody");
+        let date = 1;
+
+        for (let i = 0; i < 6; i++) {
+          const tr = document.createElement("tr");
+          for (let j = 0; j < 7; j++) {
+            const td = document.createElement("td");
+            if (i === 0 && j < firstDay) {
+              td.textContent = ""; // Empty cell for days before the first day
+            } else if (date > daysInMonth) {
+              break; // Stop adding cells after the last day
+            } else {
+              const fullDate = `${year}-${String(month + 1).padStart(
+                2,
+                "0"
+              )}-${String(date).padStart(2, "0")}`;
+              td.textContent = date;
+
+              // Add click event listener for all dates
+              td.addEventListener("click", () => displayEvents(fullDate));
+
+              // Highlight today's date
+              if (formatDate(new Date()) === fullDate) {
+                td.classList.add("today");
+              }
+
+              // Highlight dates that have events
+              JSON.parse(localStorage.getItem("events")).forEach((event) => {
+                if (isDateInRange(fullDate, event.startDate, event.endDate)) {
+                  td.classList.add("event-range");
+                }
+              });
+
+              date++;
+            }
+            tr.appendChild(td);
+          }
+          tbody.appendChild(tr);
+        }
+        table.appendChild(tbody);
+        calendarElement.appendChild(table);
+      }
+
+      // Initialize the calendar
+      function initCalendar() {
+        generateCalendar(currentYear, currentMonth);
+
+        document.getElementById("prev-month").addEventListener("click", () => {
+          currentMonth--;
+          if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+          }
+          generateCalendar(currentYear, currentMonth);
+        });
+
+        document.getElementById("next-month").addEventListener("click", () => {
+          currentMonth++;
+          if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+          }
+          generateCalendar(currentYear, currentMonth);
+        });
+      }
+
+      initCalendar();
+    </script>
+
+    <script>
+      document
+        .getElementById("create-task-button")
+        .addEventListener("click", createTask);
+      const showMoreButton = document.getElementById("show-more-button");
+
+      // Redirect to task.html when "Show More" is clicked
+      showMoreButton.addEventListener("click", () => {
+        window.location.href = "task.html";
+      });
+
+      window.onload = async () => {
+        await fetchTasks();
+      };
+
+      async function createTask() {
+        const title = document.getElementById("task-title").value;
+        const status = document.getElementById("task-status").value;
+        const messageElement = document.getElementById("message");
+
+        if (!title) {
+          messageElement.innerHTML = "Please provide a task title!";
+          messageElement.style.color = "red";
+          return;
+        }
+
+        const data = { title, status };
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("token");
+
+        if (!user || !token) {
+          messageElement.innerHTML =
+            "No user found or no token found. Please log in again.";
+          messageElement.style.color = "red";
+          return;
+        }
+
+        data.department = user.department;
+
+        try {
+          const response = await fetch(`http://localhost:8000/api/tasks`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(data),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            messageElement.innerHTML = "Task created successfully!";
+            messageElement.style.color = "green";
+            await fetchTasks();
+          } else {
+            messageElement.innerHTML =
+              result.message || "Failed to create task";
+            messageElement.style.color = "red";
+          }
+        } catch (error) {
+          messageElement.innerHTML = "Error creating task: " + error;
+          messageElement.style.color = "red";
+        }
+      }
+
+      async function fetchTasks() {
+        const taskListContainer = document.getElementById("task-list");
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("token");
+
+        if (!user || !token) {
+          taskListContainer.innerHTML = "Please log in to see tasks.";
+          return;
+        }
+
+        try {
+          const response = await fetch("http://localhost:8000/api/tasks", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            const tasks = result.tasks;
+            if (tasks && tasks.length > 0) {
+              taskListContainer.innerHTML = tasks
+                .slice(0, 3)
+                .map(
+                  (task) => `
+                <div class="task-item">
+                  <h3>${task.title}</h3>
+                  <p>Status: ${task.status}</p>
+                  <p>Department: ${task.department}</p>
+                </div>
+              `
+                )
+                .join("");
+
+              // Show the "Show More" button if there are more than 3 tasks
+              if (tasks.length > 3) {
+                showMoreButton.style.display = "block";
+              } else {
+                showMoreButton.style.display = "none";
+              }
+            } else {
+              taskListContainer.innerHTML = "No tasks available.";
+            }
+          } else {
+            taskListContainer.innerHTML = "Failed to fetch tasks.";
+          }
+        } catch (error) {
+          taskListContainer.innerHTML = "Error fetching tasks: " + error;
+        }
+      }
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
+      const targetId = this.getAttribute("href").substring(1);
+      const targetElement = document.getElementById(targetId);
+
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    });
+  });
+
+    </script>
+  </body>
+</html>

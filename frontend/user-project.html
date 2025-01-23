@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Details</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="./images/logo.png" type="image/x-icon">
+    <style>
+      body {
+        margin: 0;
+        font-family: "Outfit", sans-serif;
+        background-color: #f3f3f3;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .card {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #0077b6;
+        color: #fff;
+        margin-bottom: 20px;
+      }
+
+      .card h4 {
+        margin: 0;
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      .card p {
+        margin: 5px 0;
+        font-size: 16px;
+      }
+
+      .comment-section {
+        margin-top: 20px;
+      }
+
+      .comment-section h4 {
+        margin-bottom: 10px;
+      }
+
+      .comment-form textarea {
+        width: 90%;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        resize: none;
+      }
+
+      .btn {
+        background-color: #0077b6;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      .btn:hover {
+        background-color: #005f8a;
+      }
+
+      .comments {
+        margin-top: 10px;
+      }
+
+      .comment {
+        padding: 10px;
+        background-color: #f3f3f3;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+
+      .comment strong {
+        display: block;
+        margin-bottom: 5px;
+      }
+      .back-arrow {
+        font-size: 18px;
+        font-weight: bold;
+        color: black;
+        padding: 10px 20px;
+        cursor: pointer;
+        display: inline-block;
+        background-color: #f3f3f3;
+      }
+
+      .back-arrow:hover {
+        color: #005f8a;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="back-arrow" onclick="goBack()">&larr; Back</div>
+    <div class="container">
+      <div class="card" id="taskCard">
+        <!-- Task Details Will Be Rendered Here -->
+      </div>
+
+      <div class="comment-section">
+        <h4>Add Comment</h4>
+        <div class="comment-form">
+          <textarea
+            id="commentInput"
+            rows="3"
+            placeholder="Write a comment..."
+          ></textarea>
+          <button class="btn" onclick="addComment()">Submit</button>
+        </div>
+        <div class="comments" id="comments">
+          <!-- Comments Will Be Rendered Here -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Load Task Data
+      const taskCard = document.getElementById("taskCard");
+      const task = JSON.parse(localStorage.getItem("selectedTask"));
+
+      if (task) {
+        taskCard.innerHTML = `
+        <h4>${task.name}</h4>
+        <p><strong>Department:</strong> ${task.department}</p>
+        <p><strong>Status:</strong> ${task.status}</p>
+        <p><strong>Locality:</strong> ${task.locality}</p>
+      `;
+      }
+
+      // Load Comments
+      const commentsContainer = document.getElementById("comments");
+      const comments = JSON.parse(localStorage.getItem("comments")) || [];
+
+      function renderComments() {
+        commentsContainer.innerHTML = "";
+        comments.forEach((comment) => {
+          const div = document.createElement("div");
+          div.classList.add("comment");
+          div.innerHTML = `
+          <strong>${comment.name}</strong>
+          <p>${comment.text}</p>
+        `;
+          commentsContainer.appendChild(div);
+        });
+      }
+
+      renderComments();
+
+      // Add Comment
+      function addComment() {
+        const name =
+          JSON.parse(localStorage.getItem("profile"))?.username || "Anonymous";
+        const text = document.getElementById("commentInput").value;
+
+        if (text.trim()) {
+          comments.push({ name, text });
+          localStorage.setItem("comments", JSON.stringify(comments));
+          document.getElementById("commentInput").value = "";
+          renderComments();
+        }
+      }
+
+      function goBack() {
+        window.location.href = "user.html"; // Redirect to user.html
+      }
+    </script>
+  </body>
+</html>
