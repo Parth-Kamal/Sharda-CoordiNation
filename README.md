@@ -1,4 +1,4 @@
-# Dev-Bandits-SIH
+# CoordiNation
 ## Overview 
 The Interdepartmental Cooperation Platform (ICP) is a digital solution designed to improve communication, coordination, and resource management among various government departments at the city level. It addresses the common issue of miscommunication and redundancy in projects such as public infrastructure maintenance, where multiple departments often need to work together. ICP enables seamless data exchange, task scheduling, and collaborative project management to ensure that different departments work in harmony, ultimately saving resources and reducing project delays.
 
