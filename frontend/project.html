@@ -74,6 +74,80 @@
               placeholder="Enter project duration"
             />
           </div>
+          <div class="form-group">
+          <label for="startLocation">Start Location (Required):</label>
+          <select id="startLocation" required onchange="storeStartValue()"">
+            <option value=" "></option>
+            <option value="Sector 34">Sector 34</option>
+            <option value="Sector 51">Sector 51</option>
+            <option value="Sector 62">Sector 62</option>
+            <option value="Sector 63">Sector 63</option>
+            <option value="Sector 64">Sector 64</option>
+            <option value="Sector 65">Sector 65</option>
+            <option value="Sector 66">Sector 66</option>
+            <option value="Sector 67">Sector 67</option>
+            <option value="Sector 68">Sector 68</option>
+            <option value="Sector 69">Sector 69</option>
+            <option value="Sector 70">Sector 70</option>
+            <option value="Pari Chowk">Pari Chowk</option>
+            <option value="Knowledge Park I">Knowledge Park I</option>
+            <option value="Knowledge Park II">Knowledge Park II</option>
+            <option value="Knowledge Park III">Knowledge Park III</option>
+            <option value="Delta I">Delta I</option>
+            <option value="Gamma I">Gamma I</option>
+            <option value="Beta I">Beta I</option>
+            <option value="Sector 1">Sector I</option>
+            <option value="Beta I">Beta I</option>
+            <option value="Greater Noida Industrial Area">Greater Noida Industrial Area</option>
+            <option value="Sector ZETA I">Sector ZETA I</option>
+            <option value="Sector ZETA II">Sector ZETA II</option>
+            <option value="Alpha-I Commercial Belt">Alpha-I Commercial Belt</option>
+            <option value="Surajpur Industrial">Surajpur Industrial</option>
+            <option value="Ecotech I">Ecotech I</option>
+            <option value="Sharda University Area">Sharda University Area</option>
+            <option value="Galgotias University Area">Galgotias University Area</option>
+            <option value="Jaypee Greens Area">Jaypee Greens Area</option>
+            <option value="Greater Noida Sports Complex">Greater Noida Sports Complex</option>
+            <option value="Expo Mart">Expo Mart</option>
+          </select>
+          </div>
+          <div class="form-group">
+          <label for="endLocation">End Location (Optional):</label>
+          <select id="endLocation">
+            <option value=" "></option>
+            <option value="Sector 34">Sector 34</option>
+            <option value="Sector 51">Sector 51</option>
+            <option value="Sector 62">Sector 62</option>
+            <option value="Sector 63">Sector 63</option>
+            <option value="Sector 64">Sector 64</option>
+            <option value="Sector 65">Sector 65</option>
+            <option value="Sector 66">Sector 66</option>
+            <option value="Sector 67">Sector 67</option>
+            <option value="Sector 68">Sector 68</option>
+            <option value="Sector 69">Sector 69</option>
+            <option value="Sector 70">Sector 70</option>
+            <option value="Pari Chowk">Pari Chowk</option>
+            <option value="Knowledge Park I">Knowledge Park I</option>
+            <option value="Knowledge Park II">Knowledge Park II</option>
+            <option value="Knowledge Park III">Knowledge Park III</option>
+            <option value="Delta I">Delta I</option>
+            <option value="Gamma I">Gamma I</option>
+            <option value="Beta I">Beta I</option>
+            <option value="Sector 1">Sector I</option>
+            <option value="Beta I">Beta I</option>
+            <option value="Greater Noida Industrial Area">Greater Noida Industrial Area</option>
+            <option value="Sector ZETA I">Sector ZETA I</option>
+            <option value="Sector ZETA II">Sector ZETA II</option>
+            <option value="Alpha-I Commercial Belt">Alpha-I Commercial Belt</option>
+            <option value="Surajpur Industrial">Surajpur Industrial</option>
+            <option value="Ecotech I">Ecotech I</option>
+            <option value="Sharda University Area">Sharda University Area</option>
+            <option value="Galgotias University Area">Galgotias University Area</option>
+            <option value="Jaypee Greens Area">Jaypee Greens Area</option>
+            <option value="Greater Noida Sports Complex">Greater Noida Sports Complex</option>
+            <option value="Expo Mart">Expo Mart</option>
+          </select>
+          </div>
           <button class="project-button" onclick="createProject()">
             Create Project
           </button>
@@ -81,7 +155,6 @@
 
         <div class="projects" id="projects-section">
           <h2>All Projects</h2>
-          <!-- Projects will be dynamically rendered here -->
         </div>
       </div>
       <script>
@@ -91,90 +164,92 @@
           "create-project-section"
         );
         let projects = JSON.parse(localStorage.getItem("projects")) || [];
-  
-        // Check if the user is an admin
         if (userData?.role === "admin") {
           createProjectSection.classList.remove("hidden");
         }
-  
+
         if (userData) {
           document.getElementById("username").innerText = userData.name;
           document.getElementById("department").innerText = userData.department;
         }
-  
-        let editIndex = null; // To track the index of the project being edited
-  
+
+        let editIndex = null;
+
         function renderProjects() {
           projectsSection.innerHTML = "<h2>All Projects</h2>";
           projects.forEach((project, index) => {
             const projectCard = document.createElement("div");
             projectCard.className = "project-card";
             projectCard.innerHTML = `
-        <h3>${project.name}</h3>
-        <p><strong>Description:</strong> ${project.description}</p>
-        <p><strong>Admin:</strong> ${project.admin}</p>
-        <p><strong>Duration:</strong> ${project.duration}</p>
-      `;
-  
+              <h3>${project.name}</h3>
+              <p><strong>Description:</strong> ${project.description}</p>
+              <p><strong>Admin:</strong> ${project.admin}</p>
+              <p><strong>Duration:</strong> ${project.duration}</p>
+              <p><strong>Start Location:</strong> ${project.startLocation}</p>
+              <p><strong>End Location:</strong> ${project.endLocation}</p>
+            `;
+
             if (userData?.role === "admin") {
               projectCard.innerHTML += `
-          <div class="buttons">
-            <button class="edit" onclick="editProject(${index})">Edit</button>
-            <button onclick="deleteProject(${index})">Delete</button>
-          </div>
-        `;
+                <div class="buttons">
+                  <button class="edit" onclick="editProject(${index})">Edit</button>
+                  <button onclick="deleteProject(${index})">Delete</button>
+                </div>
+              `;
             }
-  
+
             projectsSection.appendChild(projectCard);
           });
         }
-  
+
         function createProject() {
           const name = document.getElementById("projectName").value;
           const description = document.getElementById("projectDescription").value;
           const admin = document.getElementById("username").innerText;
           const duration = document.getElementById("duration").value;
-  
-          if (!name || !description || !admin || !duration) {
+          const startLocation = document.getElementById("startLocation").value;
+          const endLocation = document.getElementById("endLocation").value;
+
+          if (!name || !description || !admin || !duration || !startLocation) {
             alert("Please fill out all fields.");
             return;
           }
-  
+
           if (editIndex !== null) {
-            // Update the existing project
-            projects[editIndex] = { name, description, admin, duration };
-            editIndex = null; // Reset editIndex
+            projects[editIndex] = { name, description, admin, duration, startLocation, endLocation };
+            editIndex = null;
           } else {
-            // Add a new project
             projects.push({ name, description, admin, duration });
           }
-  
+
           localStorage.setItem("projects", JSON.stringify(projects));
           renderProjects();
-  
+
           // Clear the form
           document.getElementById("projectName").value = "";
           document.getElementById("projectDescription").value = "";
           document.getElementById("duration").value = "";
+          document.getElementById("startLocation").value = "Sector 1";
+          document.getElementById("endLocation").value = "None";
         }
-  
+
         function editProject(index) {
           const project = projects[index];
           document.getElementById("projectName").value = project.name;
-          document.getElementById("projectDescription").value =
-            project.description;
+          document.getElementById("projectDescription").value = project.description;
           document.getElementById("duration").value = project.duration;
-  
-          editIndex = index; // Set the index of the project being edited
+          document.getElementById("startLocation").value = project.startLocation;
+          document.getElementById("endLocation").value = project.endLocation;
+
+          editIndex = index;
         }
-  
+
         function deleteProject(index) {
           projects.splice(index, 1);
           localStorage.setItem("projects", JSON.stringify(projects));
           renderProjects();
         }
-  
-        // Render projects on page load
+
         renderProjects();
       </script>
 </body>
