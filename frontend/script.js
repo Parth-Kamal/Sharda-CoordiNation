@@ -103,14 +103,103 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   });
 
+  // Initialize the map
+  const map = L.map("map").setView([28.6139, 77.209], 12); // Default view (Delhi)
+
+  // Add OpenStreetMap tile layer
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+// Define coordinates for sectors
+const sectorCoordinates = {
+  "Sector 34": [28.583650, 77.359744],
+  "Sector 51": [28.579775, 77.365701],
+  "Sector 62": [28.609574, 77.358749],
+  "Sector 63": [28.612897, 77.359083],
+  "Sector 64": [28.616220, 77.359417],
+  "Sector 65": [28.619543, 77.359751],
+  "Sector 66": [28.622866, 77.360085],
+  "Sector 67": [28.626189, 77.360419],
+  "Sector 68": [28.629512, 77.360753],
+  "Sector 69": [28.632835, 77.361087],
+  "Sector 70": [28.636158, 77.361421],
+  "Pari Chowk, Greater Noida": [28.474389, 77.503990],
+  "Knowledge Park I, Greater Noida": [28.471523, 77.498074],
+  "Knowledge Park II, Greater Noida": [28.474120, 77.489500],
+  "Knowledge Park III, Greater Noida": [28.477191, 77.481570],
+  "Delta I, Greater Noida": [28.472803, 77.505248],
+  "Gamma I, Greater Noida": [28.471889, 77.501122],
+  "Beta I, Greater Noida": [28.471470, 77.495743],
+  "Sector 1, Greater Noida": [28.587000, 77.318978],
+  "Greater Noida Industrial Area": [28.497446, 77.517007],
+  "Sector ZETA I, Greater Noida": [28.503092, 77.481954],
+  "Sector ZETA II, Greater Noida": [28.509599, 77.480894],
+  "Alpha-I Commercial Belt, Greater Noida": [28.477099, 77.499734],
+  "Surajpur Industrial Area, Greater Noida": [28.545637, 77.502385],
+  "Ecotech I, Greater Noida": [28.451800, 77.536500],
+  "Sharda University Area": [28.452324, 77.536767],
+  "Galgotias University Area": [28.457699, 77.498749],
+  "Jaypee Greens Area": [28.473053, 77.527969],
+  "Greater Noida Sports Complex": [28.471743, 77.522672],
+  "Expo Mart": [28.462108, 77.502204],
+};
+
+  // Fetch the projects from localStorage
+  const projects = JSON.parse(localStorage.getItem("projects")) || [];
+
+  // Iterate through the projects and trace routes
+  projects.forEach((project) => {
+    const startLocation = project.startLocation;
+    const endLocation = project.endLocation;
+
+    // Get coordinates for the start and end locations
+    const source = sectorCoordinates[startLocation];
+    const destination = endLocation !== "None" ? sectorCoordinates[endLocation] : null;
+
+    if (!source) {
+      console.error(`Invalid start location: ${startLocation}`);
+      return;
+    }
+
+    // Add marker for the source
+    L.marker(source).addTo(map).bindPopup(`Start: ${startLocation}`).openPopup();
+
+    if (destination) {
+      // Add marker for the destination
+      L.marker(destination).addTo(map).bindPopup(`End: ${endLocation}`).openPopup();
+
+      // Trace the route using OSRM API
+      const osrmBaseUrl = "https://router.project-osrm.org/route/v1/driving";
+      const url = `${osrmBaseUrl}/${source[1]},${source[0]};${destination[1]},${destination[0]}?overview=full&geometries=geojson`;
+
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.routes && data.routes.length > 0) {
+            // Extract the route geometry
+            const route = data.routes[0].geometry;
+
+            // Add the route as a polyline on the map
+            L.geoJSON(route, { color: "blue", weight: 4 }).addTo(map);
+
+            // Adjust the map view to fit the route
+            map.fitBounds(L.geoJSON(route).getBounds());
+          } else {
+            console.error("No routes found");
+          }
+        })
+        .catch((error) => console.error("Error fetching route:", error));
+    }
+  });
+
+
   // Initialize Leaflet Map
-  var map = L.map("map").setView([28.6139, 77.209], 12); // default location (e.g., New Delhi)
+  // var map = L.map("map").setView([28.6139, 77.209], 12); // default location (e.g., New Delhi)
 
   // Add a tile layer to the map
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 18,
-    attribution: "© OpenStreetMap contributors",
-  }).addTo(map);
+  // L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  //   maxZoom: 18,
+  //   attribution: "© OpenStreetMap contributors",
+  // }).addTo(map);
 
   // Add markers for work locations
   var workLocations = [
