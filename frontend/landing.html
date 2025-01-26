@@ -122,6 +122,40 @@
   }
 }
 
+.team-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Four columns */
+  gap: 30px;
+  align-items: stretch;
+}
+
+/* Media Query for Smaller Screens */
+@media (max-width: 768px) {
+  .team-container {
+    grid-template-columns: repeat(2, 1fr); /* Adjust to two columns on smaller screens */
+  }
+
+  .team-member img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .team-member h4 {
+    font-size: 1.1rem;
+  }
+
+  .team-member p {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .team-container {
+    grid-template-columns: 1fr; /* Single column on very small screens */
+  }
+}
+
+
   </style>
   <body>
     <div class="landing-container">
@@ -156,7 +190,7 @@
         <div class="landing-image">
           <span class="image__bg"></span>
           <img src="./images/header-bg.webp" alt="header image" />
-          <div class="image__content image__content__1">
+          <!-- <div class="image__content image__content__1">
             <span><i class="ri-user-3-line"></i></span>
             <div class="details">
               <h4>20+</h4>
@@ -166,7 +200,7 @@
                 Join Now and Enhance Inter-departmental Cooperation
               </li>
             </ul>
-          </div>
+          </div> -->
         </div>
       </header>
 
@@ -216,10 +250,9 @@
                 <a href="https://github.com/Parth-Kamal" target="_blank" title="GitHub">
                   <i class="ri-github-fill"></i>
                 </a>
-              </a>
-              <a href="https://parthkamal.netlify.app/" target="_blank" title="Portfolio">
-                <i class="ri-global-line"></i>
-              </a>    
+                <a href="https://parthkamal.netlify.app/" target="_blank" title="Portfolio">
+                  <i class="ri-global-line"></i>
+                </a>
               </div>
             </div>
             <!-- Team Member 2 -->
@@ -234,15 +267,14 @@
                 <a href="https://github.com/Van-sh" target="_blank" title="GitHub">
                   <i class="ri-github-fill"></i>
                 </a>
-              </a>
-              <a href="https://parth-kamal-portfolio.com" target="_blank" title="Portfolio">
-                <i class="ri-global-line"></i>
-              </a>
+                <a href="https://parth-kamal-portfolio.com" target="_blank" title="Portfolio">
+                  <i class="ri-global-line"></i>
+                </a>
               </div>
             </div>
             <!-- Team Member 3 -->
             <div class="team-member">
-              <img src="team/piyush.jpeg" alt="Ansh Yadav" />
+              <img src="team/piyush.jpeg" alt="Kumar Piyush" />
               <h4>Kumar Piyush</h4>
               <p>Front-End Developer</p>
               <div class="social-links">
@@ -252,15 +284,31 @@
                 <a href="https://github.com/Kumar2004-2009" target="_blank" title="GitHub">
                   <i class="ri-github-fill"></i>
                 </a>
-              </a>
-              <a href="https://kumar-piyush-portfolio.netlify.app/" target="_blank" title="Portfolio">
-                <i class="ri-global-line"></i>
-              </a>    
+                <a href="https://kumar-piyush-portfolio.netlify.app/" target="_blank" title="Portfolio">
+                  <i class="ri-global-line"></i>
+                </a>
+              </div>
+            </div>
+            <!-- Team Member 4 -->
+            <div class="team-member">
+              <img src="team/new-member.jpg" alt="New Member" />
+              <h4>New Member</h4>
+              <p>Role</p>
+              <div class="social-links">
+                <a href="https://www.linkedin.com" target="_blank" title="LinkedIn">
+                  <i class="ri-linkedin-box-fill"></i>
+                </a>
+                <a href="https://github.com" target="_blank" title="GitHub">
+                  <i class="ri-github-fill"></i>
+                </a>
+                <a href="https://portfolio-link.com" target="_blank" title="Portfolio">
+                  <i class="ri-global-line"></i>
+                </a>
               </div>
             </div>
           </div>
         </div>
-      </section>  
+      </section> 
     </div>
     <!-- <div class="newsletter-container">
         <h2>Sign up for our newsletter</h2>
