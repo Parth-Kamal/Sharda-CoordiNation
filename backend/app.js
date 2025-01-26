@@ -13,6 +13,7 @@ import contact from "./routes/contact.js";
 import resources from "./routes/resources.js";
 import tasks from "./routes/tasks.js";
 import globalErrorHandler from "./utils/globalErrorHandler.js";
+import projects from "./routes/projects.js";
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use(protectedRoute);
 
 app.use("/api/tasks", tasks);
 app.use("/api/resources",resources);
+app.use("/api/projects", projects); 
 
 app.all("*", (req, res) => {
    res.status(404).json({

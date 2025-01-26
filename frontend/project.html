@@ -210,7 +210,7 @@
           const startLocation = document.getElementById("startLocation").value;
           const endLocation = document.getElementById("endLocation").value;
 
-          if (!name || !description || !admin || !duration || !startLocation) {
+          if (!name || !description || !admin || !duration || !startLocation || !endLocation) {
             alert("Please fill out all fields.");
             return;
           }
@@ -219,7 +219,7 @@
             projects[editIndex] = { name, description, admin, duration, startLocation, endLocation };
             editIndex = null;
           } else {
-            projects.push({ name, description, admin, duration });
+            projects.push({ name, description, admin, duration, startLocation, endLocation });
           }
 
           localStorage.setItem("projects", JSON.stringify(projects));
@@ -229,8 +229,8 @@
           document.getElementById("projectName").value = "";
           document.getElementById("projectDescription").value = "";
           document.getElementById("duration").value = "";
-          document.getElementById("startLocation").value = "Sector 1";
-          document.getElementById("endLocation").value = "None";
+          document.getElementById("startLocation").value = " ";
+          document.getElementById("endLocation").value = " ";
         }
 
         function editProject(index) {

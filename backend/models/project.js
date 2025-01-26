@@ -20,7 +20,7 @@ const projectSchema = new Schema(
     },
     endLocation: {
       type: String,
-      default: "None",
+      default: [true, "Project should have a end location"],
     },
   },
   { timestamps: true }
